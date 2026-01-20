@@ -1,0 +1,25 @@
+<Window
+    x:Class="Vantus.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="AppTitleBar" Height="32" Grid.Row="0">
+            <TextBlock Text="Vantus" VerticalAlignment="Center" Margin="12,0,0,0"/>
+        </Grid>
+
+        <NavigationView x:Name="NavView" Grid.Row="1">
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Name="SearchBox" QueryIcon="Find"/>
+            </NavigationView.AutoSuggestBox>
+            <Frame x:Name="ContentFrame"/>
+        </NavigationView>
+
+        <InfoBar x:Name="FooterInfoBar" Grid.Row="2" IsOpen="False"/>
+    </Grid>
+</Window>
