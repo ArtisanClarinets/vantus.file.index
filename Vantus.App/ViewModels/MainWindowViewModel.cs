@@ -52,7 +52,7 @@ public partial class MainWindowViewModel : ObservableObject
             var catItem = new NavigationViewItem
             {
                 Content = category.Title,
-                Icon = new SymbolIcon { Symbol = SymbolRegular.Folder24 },
+                Icon = new SymbolIcon { Symbol = GetCategoryIcon(category.Id) },
                 Tag = category.Id
             };
             
@@ -73,5 +73,31 @@ public partial class MainWindowViewModel : ObservableObject
             
             NavigationItems.Add(catItem);
         }
+    }
+
+    private SymbolRegular GetCategoryIcon(string categoryId)
+    {
+        return categoryId switch
+        {
+            "general" => SymbolRegular.Settings24,
+            "workspaces" => SymbolRegular.Briefcase24,
+            "locations" => SymbolRegular.Folder24,
+            "indexing" => SymbolRegular.ArrowSync24,
+            "ai_models" => SymbolRegular.BrainCircuit24,
+            "extraction" => SymbolRegular.DocumentText24,
+            "organize_and_automations" => SymbolRegular.Flowchart24,
+            "tags_and_taxonomy" => SymbolRegular.Tag24,
+            "partners" => SymbolRegular.People24,
+            "search" => SymbolRegular.Search24,
+            "windows_integration" => SymbolRegular.Window24,
+            "privacy_and_security" => SymbolRegular.Shield24,
+            "compliance_and_audit" => SymbolRegular.Notepad24,
+            "notifications" => SymbolRegular.Alert24,
+            "storage_and_maintenance" => SymbolRegular.Storage24,
+            "diagnostics" => SymbolRegular.Pulse24,
+            "admin_managed" => SymbolRegular.LockClosed24,
+            "about" => SymbolRegular.Info24,
+            _ => SymbolRegular.Folder24
+        };
     }
 }

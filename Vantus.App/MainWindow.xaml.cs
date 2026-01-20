@@ -19,7 +19,7 @@ public partial class MainWindow : FluentWindow
         _schema = schema;
         _store = store;
         
-        Loaded += (s, e) => Navigate("general.appearance");
+        Loaded += (s, e) => Navigate("dashboard");
     }
 
     private void RootNavigation_SelectionChanged(object sender, System.Windows.RoutedEventArgs e)
