@@ -35,7 +35,7 @@ public partial class App : Application
                 services.AddSingleton<ISettingsStore, SettingsStore>();
                 services.AddSingleton<IPresetManager, PresetManager>();
                 services.AddSingleton<IPolicyEngine, PolicyEngine>();
-                services.AddSingleton<IEngineClient, StubEngineClient>();
+                services.AddSingleton<IEngineClient, NamedPipeEngineClient>();
                 services.AddSingleton<IImportExportService, ImportExportService>();
 
                 // ViewModels

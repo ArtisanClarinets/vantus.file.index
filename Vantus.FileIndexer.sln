@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vantus.Tests", "Vantus.Test
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "Vantus.Packaging", "Vantus.Packaging\Vantus.Packaging.wapproj", "{A8A3362E-2510-4F87-9755-6C8E68228C91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vantus.Engine", "Vantus.Engine\Vantus.Engine.csproj", "{2DE163E9-3C66-4C0C-A7B2-4E3887BDAE4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,5 +34,9 @@ Global
 		{36745374-D68E-4A32-90DE-1FB0F98A6CB7}.Debug|Any CPU.Build.0 = Debug|x86
 		{36745374-D68E-4A32-90DE-1FB0F98A6CB7}.Release|Any CPU.ActiveCfg = Release|x86
 		{36745374-D68E-4A32-90DE-1FB0F98A6CB7}.Release|Any CPU.Build.0 = Release|x86
+		{2DE163E9-3C66-4C0C-A7B2-4E3887BDAE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE163E9-3C66-4C0C-A7B2-4E3887BDAE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE163E9-3C66-4C0C-A7B2-4E3887BDAE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE163E9-3C66-4C0C-A7B2-4E3887BDAE4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

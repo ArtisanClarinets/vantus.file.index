@@ -28,11 +28,13 @@ public class SettingsRegistry : ISettingsRegistry
         {
             if (!File.Exists(path))
             {
+#if DEBUG
                  // Try looking up one level (sometimes needed in tests or debug)
                  var altPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "settings_definitions.json");
                  if (File.Exists(altPath)) path = altPath;
                  else if (File.Exists("settings_definitions.json")) path = "settings_definitions.json";
                  else
+#endif
                  {
                      _logger.LogCritical("settings_definitions.json not found.");
                      return;

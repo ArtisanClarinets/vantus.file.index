@@ -24,11 +24,13 @@ public class PolicyEngine : IPolicyEngine
 
         if (!File.Exists(path))
         {
+#if DEBUG
              // Try looking up one level (sometimes needed in tests or debug)
              var altPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "policies.json");
              if (File.Exists(altPath)) path = altPath;
              else if (File.Exists("policies.json")) path = "policies.json";
              else
+#endif
              {
                  _logger.LogInformation("Policy file not found.");
                  return;
