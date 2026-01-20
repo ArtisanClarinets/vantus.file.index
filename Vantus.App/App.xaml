@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
+            <local:Converters.IntToVisibilityConverter x:Key="CountToVisibilityConverter" xmlns:local="using:Vantus.App"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

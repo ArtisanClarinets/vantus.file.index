@@ -1224,8 +1224,8 @@
   },
   {
       "setting_id": "about.version",
-      "page": "version_licenses",
-      "section": "About",
+      "page": "about",
+      "section": "Info",
       "label": "Version",
       "helper_text": "Current application version.",
       "control_type": "status",
@@ -1244,7 +1244,7 @@
   },
   {
       "setting_id": "about.reset_app",
-      "page": "reset",
+      "page": "about",
       "section": "Reset",
       "label": "Reset Application",
       "helper_text": "Reset all settings to default.",

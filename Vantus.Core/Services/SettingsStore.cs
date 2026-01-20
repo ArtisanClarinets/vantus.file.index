@@ -10,6 +10,7 @@ public class SettingsStore : ISettingsStore
     private const string FileName = "settings.json";
     private SettingsFileModel _model = new();
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
+    private readonly SemaphoreSlim _semaphore = new(1, 1);
 
     public event EventHandler<string>? SettingChanged;
 
@@ -23,23 +24,32 @@ public class SettingsStore : ISettingsStore
 
     public async Task LoadAsync()
     {
-        var path = GetPath();
-        if (File.Exists(path))
+        await _semaphore.WaitAsync();
+        try
         {
-            try
+            var path = GetPath();
+            if (File.Exists(path))
             {
-                var json = await File.ReadAllTextAsync(path);
-                _model = JsonSerializer.Deserialize<SettingsFileModel>(json, _options) ?? new();
+                try
+                {
+                    var json = await File.ReadAllTextAsync(path);
+                    _model = JsonSerializer.Deserialize<SettingsFileModel>(json, _options) ?? new();
+                }
+                catch
+                {
+                    _model = new();
+                }
             }
-            catch
-            {
-                _model = new();
-            }
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
 
     public async Task SaveAsync()
     {
+        await _semaphore.WaitAsync();
         try
         {
             var path = GetPath();
@@ -47,6 +57,10 @@ public class SettingsStore : ISettingsStore
             await File.WriteAllTextAsync(path, json);
         }
         catch { }
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public T? GetValue<T>(string key)
