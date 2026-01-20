@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Vantus.Core.Interfaces;
 using Vantus.Core.Models;
@@ -7,7 +8,15 @@ namespace Vantus.Core.Services;
 public class PolicyEngine : IPolicyEngine
 {
     private Dictionary<string, PolicyLock> _locks = new();
+    private readonly ILogger<PolicyEngine> _logger;
     private bool _managed;
+
+    public PolicyEngine(ILogger<PolicyEngine> logger)
+    {
+        _logger = logger;
+    }
+
+    public bool IsManaged => _managed;
 
     public async Task InitializeAsync()
     {
@@ -15,11 +24,17 @@ public class PolicyEngine : IPolicyEngine
 
         if (!File.Exists(path))
         {
+#if DEBUG
              // Try looking up one level (sometimes needed in tests or debug)
              var altPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "policies.json");
              if (File.Exists(altPath)) path = altPath;
              else if (File.Exists("policies.json")) path = "policies.json";
-             else return;
+             else
+#endif
+             {
+                 _logger.LogInformation("Policy file not found.");
+                 return;
+             }
         }
 
         if (File.Exists(path))
@@ -35,7 +50,10 @@ public class PolicyEngine : IPolicyEngine
                     _locks = policy.Locks.ToDictionary(l => l.SettingId);
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load policy file.");
+            }
         }
     }
 
