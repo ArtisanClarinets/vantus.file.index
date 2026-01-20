@@ -154,6 +154,47 @@
       "value_type": "int",
       "allowed_values": { "min": 10, "max": 100, "step": 10 },
       "defaults": { "personal": 50, "pro": 80, "enterprise_private": 40 }
+    },
+    {
+      "setting_id": "locations.included",
+      "page": "locations.included",
+      "section": "Folders",
+      "label": "Included Folders",
+      "helper_text": "Folders to scan and index.",
+      "control_type": "path_list",
+      "value_type": "list<string>",
+      "defaults": { "personal": ["C:\\Users\\%USER%\\Documents"], "pro": ["C:\\Users\\%USER%\\Documents", "D:\\Work"] }
+    },
+    {
+      "setting_id": "ai.runtime_device",
+      "page": "ai.runtime",
+      "section": "Hardware",
+      "label": "Compute Device",
+      "helper_text": "Hardware used for AI inference.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["Auto", "CPU", "GPU", "NPU"],
+      "defaults": { "personal": "Auto" }
+    },
+    {
+      "setting_id": "search.max_results",
+      "page": "search.results",
+      "section": "Limits",
+      "label": "Max Results",
+      "helper_text": "Maximum number of search results to display.",
+      "control_type": "number",
+      "value_type": "int",
+      "defaults": { "personal": 50 }
+    },
+    {
+      "setting_id": "organize.enable_rules",
+      "page": "organize.rules",
+      "section": "Automation",
+      "label": "Enable Rules",
+      "helper_text": "Globally enable or disable automation rules.",
+      "control_type": "toggle",
+      "value_type": "bool",
+      "defaults": { "personal": true }
     }
   ]
 }
