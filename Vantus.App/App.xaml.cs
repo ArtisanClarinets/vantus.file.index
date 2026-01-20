@@ -47,10 +47,17 @@ public partial class App : Application
             Build();
     }
 
+    private System.Diagnostics.Process? _engineProcess;
+
     protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         await Host.StartAsync();
         StartEngine();
+
+        m_window.Closed += (s, e) =>
+        {
+            StopEngine();
+        };
 
         try
         {
@@ -98,13 +105,26 @@ public partial class App : Application
                     UseShellExecute = false,
                     CreateNoWindow = true
                 };
-                System.Diagnostics.Process.Start(psi);
+                _engineProcess = System.Diagnostics.Process.Start(psi);
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Failed to start engine: {ex}");
             }
         }
+    }
+
+    private void StopEngine()
+    {
+        try
+        {
+            if (_engineProcess != null && !_engineProcess.HasExited)
+            {
+                _engineProcess.Kill();
+                _engineProcess.Dispose();
+            }
+        }
+        catch { }
     }
 
     private Window m_window;

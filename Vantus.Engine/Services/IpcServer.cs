@@ -9,16 +9,31 @@ public class IpcServer
 {
     private readonly ILogger<IpcServer> _logger;
     private readonly SearchService _searchService;
+    private readonly DatabaseService _db;
+    private readonly FileCrawlerService _crawler;
     private const string PipeName = "VantusEnginePipe";
 
-    public IpcServer(ILogger<IpcServer> logger, SearchService searchService)
+    public IpcServer(ILogger<IpcServer> logger, SearchService searchService, DatabaseService db, FileCrawlerService crawler)
     {
         _logger = logger;
         _searchService = searchService;
+        _db = db;
+        _crawler = crawler;
     }
 
     public async Task StartAsync(CancellationToken ct)
     {
+        // Monitor for orphaned process state (if parent dies without killing us)
+        _ = Task.Run(async () =>
+        {
+            while(!ct.IsCancellationRequested)
+            {
+                await Task.Delay(5000, ct);
+                // If we haven't received a connection in X minutes, or some other heartbeat, we could exit.
+                // For now, relies on explicit kill or pipe broken signals if we were doing persistent connections.
+            }
+        }, ct);
+
         while (!ct.IsCancellationRequested)
         {
             try
@@ -56,6 +71,12 @@ public class IpcServer
                     var paths = results.Select(r => r.Path).ToList();
                     var json = System.Text.Json.JsonSerializer.Serialize(paths);
                     await writer.WriteLineAsync(json);
+                }
+                else if (line == "REBUILD")
+                {
+                    await _db.RebuildAsync();
+                    await _crawler.UpdateLocationsAsync(ct);
+                    await writer.WriteLineAsync("OK");
                 }
                 else
                 {

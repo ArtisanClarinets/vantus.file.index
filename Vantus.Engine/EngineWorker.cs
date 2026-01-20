@@ -31,6 +31,27 @@ public class EngineWorker : BackgroundService
         // Initial crawl
         _ = Task.Run(() => _crawler.StartCrawlingAsync(stoppingToken), stoppingToken);
 
+        // Watch for settings changes
+        WatchSettings(stoppingToken);
+
         await Task.Delay(-1, stoppingToken);
+    }
+
+    private void WatchSettings(CancellationToken stoppingToken)
+    {
+        var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        var folder = Path.Combine(localAppData, "Vantus");
+        Directory.CreateDirectory(folder);
+
+        var watcher = new FileSystemWatcher(folder, "settings.json");
+        watcher.NotifyFilter = NotifyFilters.LastWrite;
+        watcher.Changed += async (s, e) =>
+        {
+            // Debounce settings reload
+            await Task.Delay(1000, stoppingToken);
+            _logger.LogInformation("Settings changed, reloading...");
+            await _crawler.UpdateLocationsAsync(stoppingToken);
+        };
+        watcher.EnableRaisingEvents = true;
     }
 }

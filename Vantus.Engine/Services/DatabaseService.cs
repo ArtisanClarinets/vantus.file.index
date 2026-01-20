@@ -119,4 +119,25 @@ public class DatabaseService
     }
 
     public SqliteConnection GetConnection() => new SqliteConnection(_connectionString);
+
+    public async Task RebuildAsync()
+    {
+        using var conn = GetConnection();
+        await conn.OpenAsync();
+
+        // Truncate/Delete all data
+        // SQLite doesn't support TRUNCATE, so DELETE FROM
+        await conn.ExecuteAsync("DELETE FROM files");
+        await conn.ExecuteAsync("DELETE FROM tags");
+        await conn.ExecuteAsync("DELETE FROM file_tags");
+        await conn.ExecuteAsync("DELETE FROM partners");
+        await conn.ExecuteAsync("DELETE FROM file_partners");
+        await conn.ExecuteAsync("DELETE FROM action_log");
+        // Note: FTS triggers will handle files_fts cleanup automatically via DELETE on files
+
+        // Vacuum to reclaim space
+        await conn.ExecuteAsync("VACUUM");
+
+        _logger.LogInformation("Database rebuilt (truncated)");
+    }
 }

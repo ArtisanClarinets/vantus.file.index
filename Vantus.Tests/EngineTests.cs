@@ -163,4 +163,32 @@ public class EngineTests : IDisposable
             if (Directory.Exists(destFolder)) Directory.Delete(destFolder, true);
         }
     }
+
+    [Fact]
+    public async Task ActionLogService_UndoLastActionAsync_ReversesMove()
+    {
+        var db = new DatabaseService(_dbLoggerMock.Object, _testDbPath);
+        await db.InitializeAsync();
+        var actionLog = new ActionLogService(db, _actionLogLoggerMock.Object);
+
+        var source = Path.Combine(Path.GetTempPath(), "undo_source.txt");
+        var dest = Path.Combine(Path.GetTempPath(), "undo_dest.txt");
+        await File.WriteAllTextAsync(dest, "Content"); // File already at dest (simulating after move)
+
+        // Log the "Move" that happened
+        await actionLog.LogActionAsync(source, "Move", $"Applied rule 'Test' (Move) to {source} -> {dest}");
+
+        try
+        {
+            await actionLog.UndoLastActionAsync();
+
+            Assert.True(File.Exists(source), "Source should be restored");
+            Assert.False(File.Exists(dest), "Dest should be gone");
+        }
+        finally
+        {
+            if (File.Exists(source)) File.Delete(source);
+            if (File.Exists(dest)) File.Delete(dest);
+        }
+    }
 }

@@ -21,9 +21,19 @@ public class FileCrawlerService : IDisposable
 
     public async Task StartCrawlingAsync(CancellationToken cancellationToken)
     {
+        await UpdateLocationsAsync(cancellationToken);
+    }
+
+    public async Task UpdateLocationsAsync(CancellationToken cancellationToken)
+    {
+        // Stop existing watchers
+        Dispose();
+
         // Get included folders from settings
+        // Force reload settings if needed (SettingsStore handles reload if notified, but here we just read)
+        await _settingsStore.LoadAsync();
         var locations = _settingsStore.GetValue<List<string>>("locations.included") ?? new List<string>();
-        // Resolve special folders if needed (e.g. "Documents" -> path)
+
         var resolvedLocations = ResolveLocations(locations);
 
         foreach (var path in resolvedLocations)
@@ -31,12 +41,11 @@ public class FileCrawlerService : IDisposable
             if (cancellationToken.IsCancellationRequested) break;
             if (Directory.Exists(path))
             {
-                _logger.LogInformation("Crawling {Path}", path);
+                _logger.LogInformation("Crawling/Watching {Path}", path);
 
-                // Start watcher
                 StartWatcher(path);
-
-                await CrawlDirectoryAsync(path, cancellationToken);
+                // We crawl in background to not block the caller/updates
+                _ = Task.Run(() => CrawlDirectoryAsync(path, cancellationToken), cancellationToken);
             }
         }
     }
