@@ -1,14 +1,35 @@
-<Window
-    x:Class="Vantus.App.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:pages="using:Vantus.App.Pages"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Title="Vantus File Indexer">
-
+<ui:FluentWindow x:Class="Vantus.App.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:views="clr-namespace:Vantus.App.Views"
+                 xmlns:pages="clr-namespace:Vantus.App.Pages"
+                 mc:Ignorable="d"
+                 Title="Vantus File Indexer" Height="720" Width="1200"
+                 WindowStartupLocation="CenterScreen"
+                 ExtendsContentIntoTitleBar="True">
     <Grid>
-        <pages:ShellPage />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ui:NavigationView x:Name="RootNavigation"
+                           PaneDisplayMode="Left"
+                           IsBackButtonVisible="Collapsed"
+                           SelectionChanged="OnNavigationSelectionChanged">
+             <ui:NavigationView.MenuItems>
+                 <ui:NavigationViewItem Content="Dashboard" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type views:DashboardPage}" />
+                 <ui:NavigationViewItem Content="Search" Icon="{ui:SymbolIcon Search24}" TargetPageType="{x:Type views:SearchPage}" />
+                 <ui:NavigationViewItem Content="Rules" Icon="{ui:SymbolIcon CheckboxChecked24}" TargetPageType="{x:Type views:RulesEditor}" />
+             </ui:NavigationView.MenuItems>
+             <ui:NavigationView.FooterMenuItems>
+                 <ui:NavigationViewItem Content="Settings" Icon="{ui:SymbolIcon Settings24}" TargetPageType="{x:Type pages:SettingsPage}" />
+             </ui:NavigationView.FooterMenuItems>
+        </ui:NavigationView>
+        
+        <Frame x:Name="ContentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" />
     </Grid>
-</Window>
+</ui:FluentWindow>

@@ -1,10 +1,12 @@
+using System.IO;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.UI.Xaml;
 using Vantus.Core.Interfaces;
 using Vantus.Core.Services;
 using Vantus.Core.Engine;
 using Vantus.App.ViewModels;
+using Vantus.App.Services;
 
 namespace Vantus.App;
 
@@ -23,8 +25,6 @@ public partial class App : Application
 
     public App()
     {
-        this.InitializeComponent();
-
         Host = Microsoft.Extensions.Hosting.Host.
             CreateDefaultBuilder().
             UseContentRoot(AppContext.BaseDirectory).
@@ -38,19 +38,37 @@ public partial class App : Application
                 services.AddSingleton<IEngineClient, NamedPipeEngineClient>();
                 services.AddSingleton<IImportExportService, ImportExportService>();
 
+                // App Services
+                services.AddSingleton<ThemeService>();
+                services.AddSingleton<LocalizationService>();
+                services.AddSingleton<NotificationService>();
+                services.AddSingleton<ErrorHandlingService>();
+                services.AddSingleton<EngineLifecycleManager>();
+
                 // ViewModels
                 services.AddTransient<ShellViewModel>();
                 services.AddTransient<SettingsPageViewModel>();
                 services.AddTransient<ModesPageViewModel>();
                 services.AddTransient<ImportExportPageViewModel>();
+                services.AddTransient<DashboardViewModel>();
+                services.AddTransient<SearchViewModel>();
+                services.AddTransient<RulesEditorViewModel>();
+                
+                // Windows/Pages
+                services.AddSingleton<MainWindow>();
             }).
             Build();
     }
 
-    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
+    private async void OnStartup(object sender, StartupEventArgs e)
     {
         await Host.StartAsync();
-        StartEngine();
+
+        var lifecycleManager = GetService<EngineLifecycleManager>();
+        await lifecycleManager.StartEngineAsync();
+
+        var errorHandler = GetService<ErrorHandlingService>();
+        errorHandler.Initialize();
 
         try
         {
@@ -63,49 +81,33 @@ public partial class App : Application
 
             var store = GetService<ISettingsStore>();
             await store.LoadAsync();
+            
+            // Apply Theme
+            var themeService = GetService<ThemeService>();
+            themeService.Initialize();
         }
         catch (Exception ex)
         {
-             // Log error or show message?
-             // Proceed to activate window anyway to allow app to start (maybe in error state or defaults)
              System.Diagnostics.Debug.WriteLine($"Initialization failed: {ex}");
         }
 
-        m_window = new MainWindow();
-        m_window.Activate();
-    }
-
-    private void StartEngine()
-    {
-        // Try to find the engine executable relative to the app
-        // In dev: ../../../Vantus.Engine/bin/Debug/net8.0/Vantus.Engine.exe
-        // In prod: ./Vantus.Engine.exe
-        var engineName = "Vantus.Engine.exe";
-        var devPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Vantus.Engine", "bin", "Debug", "net8.0", engineName);
-        var prodPath = Path.Combine(AppContext.BaseDirectory, engineName);
-
-        string? path = null;
-        if (File.Exists(prodPath)) path = prodPath;
-        else if (File.Exists(devPath)) path = devPath;
-
-        if (path != null)
+        var mainWindow = GetService<MainWindow>();
+        
+        // Set window icon from assets
+        var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Resources", "app.ico");
+        if (File.Exists(iconPath))
         {
-            try
-            {
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                System.Diagnostics.Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to start engine: {ex}");
-            }
+            try {
+                mainWindow.Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri(iconPath));
+            } catch { /* Ignore icon error */ }
         }
+        
+        mainWindow.Show();
     }
 
-    private Window m_window;
+    protected override async void OnExit(ExitEventArgs e)
+    {
+        await Host.StopAsync();
+        base.OnExit(e);
+    }
 }

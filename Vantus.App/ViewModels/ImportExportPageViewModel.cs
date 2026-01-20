@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Vantus.Core.Interfaces;
 using Vantus.Core.Services;
+using System.IO;
 
 namespace Vantus.App.ViewModels;
 

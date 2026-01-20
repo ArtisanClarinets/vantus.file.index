@@ -1,12 +1,13 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using CommunityToolkit.WinUI.Controls;
+using System.Windows;
+using System.Windows.Controls;
+using Wpf.Ui.Controls;
 using Vantus.App.ViewModels;
 using System.Text.Json;
+using System.Windows.Data;
 
 namespace Vantus.App.Controls;
 
-public sealed partial class SettingsPageRenderer : UserControl
+public partial class SettingsPageRenderer : UserControl
 {
     public List<SettingGroup> Groups
     {
@@ -24,7 +25,7 @@ public sealed partial class SettingsPageRenderer : UserControl
 
     public SettingsPageRenderer()
     {
-        this.InitializeComponent();
+        InitializeComponent();
     }
 
     private void Render()
@@ -36,17 +37,25 @@ public sealed partial class SettingsPageRenderer : UserControl
         {
             if (!string.IsNullOrEmpty(group.Header))
             {
-                RootPanel.Children.Add(new TextBlock {
+                var headerBlock = new System.Windows.Controls.TextBlock {
                     Text = group.Header,
-                    Style = (Style)Application.Current.Resources["SubtitleTextBlockStyle"],
-                    Margin = new Thickness(0,0,0,8)
-                });
+                    FontSize = 16,
+                    FontWeight = FontWeights.SemiBold,
+                    Margin = new Thickness(0, 0, 0, 8)
+                };
+                RootPanel.Children.Add(headerBlock);
             }
 
-            var groupPanel = new StackPanel { Spacing = 4 };
+            var groupPanel = new StackPanel { Margin = new Thickness(0, 0, 0, 20) };
             foreach(var setting in group.Settings)
             {
-                 groupPanel.Children.Add(CreateControl(setting));
+                 var control = CreateControl(setting);
+                 if (control != null)
+                 {
+                     groupPanel.Children.Add(control);
+                     // Add spacing
+                     groupPanel.Children.Add(new Border { Height = 4 });
+                 }
             }
             RootPanel.Children.Add(groupPanel);
         }
@@ -54,13 +63,23 @@ public sealed partial class SettingsPageRenderer : UserControl
 
     private FrameworkElement CreateControl(SettingViewModel vm)
     {
-        var card = new CommunityToolkit.WinUI.Controls.SettingsCard();
+        var card = new CardControl();
         card.Header = vm.Definition.Label;
-        card.Description = vm.Definition.HelperText;
+        card.Icon = new SymbolIcon { Symbol = SymbolRegular.Settings24 }; // Default icon
+        
+        // Helper text
+        if (!string.IsNullOrEmpty(vm.Definition.HelperText))
+        {
+             // CardControl usually displays description if available? 
+             // In Wpf.Ui 3.x, CardControl has Content, Header, Icon. 
+             // Maybe we use ToolTip or put description in Content if logical.
+             // But usually we want the control in Content.
+             ToolTipService.SetToolTip(card, vm.Definition.HelperText);
+        }
 
         if (vm.IsLocked)
         {
-            card.HeaderIcon = new SymbolIcon(Symbol.Lock);
+            card.Icon = new SymbolIcon { Symbol = SymbolRegular.LockClosed24 };
             ToolTipService.SetToolTip(card, $"Managed by your organization. {vm.LockReason}");
         }
 
@@ -71,25 +90,26 @@ public sealed partial class SettingsPageRenderer : UserControl
             {
                 case "toggle":
                     var ts = new ToggleSwitch();
-                    try { ts.IsOn = Convert.ToBoolean(vm.Value); } catch {}
-                    ts.Toggled += (s, e) => vm.Value = ts.IsOn;
+                    try { ts.IsChecked = Convert.ToBoolean(vm.Value); } catch {}
+                    ts.Click += (s, e) => vm.Value = ts.IsChecked;
                     content = ts;
                     break;
                 case "slider":
                     var sl = new Slider();
                     sl.Width = 200;
+                    sl.TickFrequency = 1;
                     if (vm.Definition.AllowedValues is JsonElement je && je.ValueKind == JsonValueKind.Object)
                     {
                         if(je.TryGetProperty("min", out var min)) sl.Minimum = min.GetDouble();
                         if(je.TryGetProperty("max", out var max)) sl.Maximum = max.GetDouble();
-                        if(je.TryGetProperty("step", out var step)) sl.StepFrequency = step.GetDouble();
+                        if(je.TryGetProperty("step", out var step)) sl.TickFrequency = step.GetDouble();
                     }
                     try { sl.Value = Convert.ToDouble(vm.Value); } catch {}
                     sl.ValueChanged += (s, e) => vm.Value = sl.Value;
                     content = sl;
                     break;
                 case "dropdown":
-                    var cb = new ComboBox();
+                    var cb = new System.Windows.Controls.ComboBox();
                     cb.Width = 200;
                     if (vm.Definition.AllowedValues is JsonElement jeArr && jeArr.ValueKind == JsonValueKind.Array)
                     {
@@ -107,12 +127,12 @@ public sealed partial class SettingsPageRenderer : UserControl
                     content = cb;
                     break;
                 case "button":
-                    var btn = new Button();
+                    var btn = new Wpf.Ui.Controls.Button();
                     btn.Content = "Action";
                     content = btn;
                     break;
                 case "status":
-                    var tb = new TextBlock();
+                    var tb = new System.Windows.Controls.TextBlock();
                     tb.Text = vm.Value?.ToString() ?? "";
                     tb.VerticalAlignment = VerticalAlignment.Center;
                     content = tb;

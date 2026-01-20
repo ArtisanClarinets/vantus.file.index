@@ -1,0 +1,159 @@
+{
+  "categories": [
+    { "id": "general", "title": "General", "page_ids": ["general.appearance", "general.startup", "general.modes", "general.power", "general.data"] },
+    { "id": "workspaces", "title": "Workspaces", "page_ids": ["workspaces.switcher", "workspaces.defaults", "workspaces.import"] },
+    { "id": "locations", "title": "Locations", "page_ids": ["locations.included", "locations.exclusions", "locations.policy"] },
+    { "id": "indexing", "title": "Indexing", "page_ids": ["indexing.status", "indexing.change", "indexing.performance", "indexing.limits"] },
+    { "id": "ai", "title": "AI Models", "page_ids": ["ai.runtime", "ai.models", "ai.quality"] },
+    { "id": "extraction", "title": "Extraction", "page_ids": ["extraction.docs", "extraction.images", "extraction.code", "extraction.archives", "extraction.media", "extraction.email"] },
+    { "id": "organize", "title": "Organize & Automations", "page_ids": ["organize.mode", "organize.rules", "organize.safety", "organize.review"] },
+    { "id": "tags", "title": "Tags & Taxonomy", "page_ids": ["tags.behavior", "tags.vocab", "tags.windows"] },
+    { "id": "partners", "title": "Partners", "page_ids": ["partners.directory", "partners.matching", "partners.policies"] },
+    { "id": "search", "title": "Search", "page_ids": ["search.mode", "search.results", "search.ranking"] },
+    { "id": "windows", "title": "Windows Integration", "page_ids": ["windows.surfaces", "windows.context", "windows.search"] },
+    { "id": "privacy", "title": "Privacy & Security", "page_ids": ["privacy.storage", "privacy.access", "privacy.sensitive", "privacy.keys"] },
+    { "id": "compliance", "title": "Compliance & Audit", "page_ids": ["compliance.audit", "compliance.retention", "compliance.reports"] },
+    { "id": "notifications", "title": "Notifications", "page_ids": ["notifications.alerts", "notifications.quiet"] },
+    { "id": "storage", "title": "Storage & Maintenance", "page_ids": ["storage.locations", "storage.cache", "storage.maintenance", "storage.backup"] },
+    { "id": "diagnostics", "title": "Diagnostics", "page_ids": ["diagnostics.status", "diagnostics.trace", "diagnostics.export", "diagnostics.advanced"] },
+    { "id": "admin", "title": "Admin (Managed)", "page_ids": ["admin.policy", "admin.restrictions", "admin.deployment"] },
+    { "id": "about", "title": "About", "page_ids": ["about.version", "about.reset"] }
+  ],
+  "pages": [
+     { "id": "general.appearance", "title": "Appearance & Language", "intro": "Customize the look and feel of the application." },
+     { "id": "general.startup", "title": "Startup & Tray", "intro": "Configure startup behavior and tray icon." },
+     { "id": "general.modes", "title": "Modes & Presets", "intro": "Manage application presets and operating modes." },
+     { "id": "general.power", "title": "Power & Performance", "intro": "Manage power usage and performance." },
+     { "id": "general.data", "title": "Data Handling", "intro": "Configure data handling settings." },
+     
+     { "id": "workspaces.switcher", "title": "Workspace Switcher", "intro": "Switch between workspaces." },
+     { "id": "workspaces.defaults", "title": "Workspace Defaults", "intro": "Configure default workspace settings." },
+     { "id": "workspaces.import", "title": "Import & Export", "intro": "Import and export workspace settings." },
+
+     { "id": "locations.included", "title": "Included Locations", "intro": "Manage locations included in the index." },
+     { "id": "locations.exclusions", "title": "Exclusions", "intro": "Manage locations excluded from the index." },
+     { "id": "locations.policy", "title": "Location Policy", "intro": "Configure location policies." },
+
+     { "id": "indexing.status", "title": "Status", "intro": "View indexing status." },
+     { "id": "indexing.change", "title": "Change Detection", "intro": "Configure change detection settings." },
+     { "id": "indexing.performance", "title": "Performance", "intro": "Configure indexing performance." },
+     { "id": "indexing.limits", "title": "Content Limits", "intro": "Configure content limits." },
+
+     { "id": "ai.runtime", "title": "Runtime & Hardware", "intro": "Configure AI runtime and hardware." },
+     { "id": "ai.models", "title": "Model Set", "intro": "Configure AI models." },
+     { "id": "ai.quality", "title": "Quality Controls", "intro": "Configure AI quality controls." },
+
+     { "id": "extraction.docs", "title": "Documents", "intro": "Configure document extraction." },
+     { "id": "extraction.images", "title": "Images", "intro": "Configure image extraction." },
+     { "id": "extraction.code", "title": "Code", "intro": "Configure code extraction." },
+     { "id": "extraction.archives", "title": "Archives", "intro": "Configure archive extraction." },
+     { "id": "extraction.media", "title": "Media", "intro": "Configure media extraction." },
+     { "id": "extraction.email", "title": "Email & Exports", "intro": "Configure email extraction." },
+
+     { "id": "organize.mode", "title": "Organizing Mode", "intro": "Configure organizing mode." },
+     { "id": "organize.rules", "title": "Rules", "intro": "Configure organizing rules." },
+     { "id": "organize.safety", "title": "Safety & Undo", "intro": "Configure safety and undo settings." },
+     { "id": "organize.review", "title": "Review Queue", "intro": "Manage review queue." },
+
+     { "id": "tags.behavior", "title": "Tagging Behavior", "intro": "Configure tagging behavior." },
+     { "id": "tags.vocab", "title": "Vocabulary & Synonyms", "intro": "Manage vocabulary and synonyms." },
+     { "id": "tags.windows", "title": "Windows Metadata Fields", "intro": "Configure Windows metadata fields." },
+
+     { "id": "partners.directory", "title": "Partner Directory", "intro": "Manage partner directory." },
+     { "id": "partners.matching", "title": "Matching Logic", "intro": "Configure matching logic." },
+     { "id": "partners.policies", "title": "Partner Policies", "intro": "Configure partner policies." },
+
+     { "id": "search.mode", "title": "Search Mode", "intro": "Configure search mode." },
+     { "id": "search.results", "title": "Results & Previews", "intro": "Configure search results and previews." },
+     { "id": "search.ranking", "title": "Ranking & Facets", "intro": "Configure ranking and facets." },
+
+     { "id": "windows.surfaces", "title": "Explorer Surfaces", "intro": "Configure Explorer surfaces." },
+     { "id": "windows.context", "title": "Context Menu Actions", "intro": "Configure context menu actions." },
+     { "id": "windows.search", "title": "Windows Search Integration", "intro": "Configure Windows Search integration." },
+
+     { "id": "privacy.storage", "title": "Local Storage & Encryption", "intro": "Configure local storage and encryption." },
+     { "id": "privacy.access", "title": "Access Controls", "intro": "Configure access controls." },
+     { "id": "privacy.sensitive", "title": "Sensitive Data Protections", "intro": "Configure sensitive data protections." },
+     { "id": "privacy.keys", "title": "Keys & Rotation", "intro": "Manage encryption keys." },
+
+     { "id": "compliance.audit", "title": "Audit Log", "intro": "View audit log." },
+     { "id": "compliance.retention", "title": "Retention & Legal Hold", "intro": "Configure retention and legal hold." },
+     { "id": "compliance.reports", "title": "Policy Reports", "intro": "View policy reports." },
+
+     { "id": "notifications.alerts", "title": "Alerts & Banners", "intro": "Configure alerts and banners." },
+     { "id": "notifications.quiet", "title": "Quiet Hours", "intro": "Configure quiet hours." },
+
+     { "id": "storage.locations", "title": "Storage Locations", "intro": "Manage storage locations." },
+     { "id": "storage.cache", "title": "Cache Controls", "intro": "Configure cache controls." },
+     { "id": "storage.maintenance", "title": "Maintenance & Repair", "intro": "Perform maintenance and repair." },
+     { "id": "storage.backup", "title": "Backup & Restore", "intro": "Backup and restore settings." },
+
+     { "id": "diagnostics.status", "title": "System Status", "intro": "View system status." },
+     { "id": "diagnostics.trace", "title": "Performance Trace", "intro": "View performance trace." },
+     { "id": "diagnostics.export", "title": "Export Diagnostics Bundle", "intro": "Export diagnostics bundle." },
+     { "id": "diagnostics.advanced", "title": "Advanced", "intro": "Advanced settings." },
+
+     { "id": "admin.policy", "title": "Policy Overview", "intro": "View policy overview." },
+     { "id": "admin.restrictions", "title": "Enforced Restrictions", "intro": "View enforced restrictions." },
+     { "id": "admin.deployment", "title": "Deployment & Updates", "intro": "Configure deployment and updates." },
+
+     { "id": "about.version", "title": "Version & Licenses", "intro": "View version and licenses." },
+     { "id": "about.reset", "title": "Reset", "intro": "Reset application settings." }
+  ],
+  "settings": [
+    {
+      "setting_id": "general.theme",
+      "page": "general.appearance",
+      "section": "Appearance",
+      "label": "App Theme",
+      "helper_text": "Select the visual theme for the application.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["Light", "Dark", "System"],
+      "defaults": { "personal": "System", "pro": "Dark", "enterprise_private": "System", "enterprise_automation": "System" }
+    },
+    {
+      "setting_id": "general.language",
+      "page": "general.appearance",
+      "section": "Language",
+      "label": "Language",
+      "helper_text": "Select the application language.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["English", "Spanish", "French", "German", "Japanese"],
+      "defaults": { "personal": "English" }
+    },
+    {
+      "setting_id": "general.startup_launch",
+      "page": "general.startup",
+      "section": "Startup",
+      "label": "Launch on startup",
+      "helper_text": "Automatically start Vantus when you log in.",
+      "control_type": "toggle",
+      "value_type": "bool",
+      "defaults": { "personal": true, "enterprise_automation": true }
+    },
+    {
+      "setting_id": "general.active_preset",
+      "page": "general.modes",
+      "section": "Presets",
+      "label": "Active Preset",
+      "helper_text": "Choose a configuration preset.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["Personal", "Pro", "Enterprise-Private", "Enterprise-Automation"],
+      "defaults": { "personal": "Personal" }
+    },
+     {
+      "setting_id": "indexing.cpu_limit",
+      "page": "indexing.performance",
+      "section": "Resources",
+      "label": "CPU Usage Limit (%)",
+      "helper_text": "Limit the CPU usage of the indexing engine.",
+      "control_type": "slider",
+      "value_type": "int",
+      "allowed_values": { "min": 10, "max": 100, "step": 10 },
+      "defaults": { "personal": 50, "pro": 80, "enterprise_private": 40 }
+    }
+  ]
+}

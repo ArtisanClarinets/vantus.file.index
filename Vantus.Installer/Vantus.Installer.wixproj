@@ -1,0 +1,20 @@
+<Project Sdk="WixToolset.Sdk/6.0.2">
+  <PropertyGroup>
+    <OutputName>VantusSetup</OutputName>
+    <OutputType>Package</OutputType>
+    <Version>1.0.0</Version>
+    <InstallerPlatform>x64</InstallerPlatform>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.UI.wixext" Version="6.0.2" />
+    <PackageReference Include="WixToolset.Heat" Version="6.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <HarvestDirectory Include="..\publish">
+      <ComponentGroupName>HarvestedComponents</ComponentGroupName>
+      <DirectoryRefId>INSTALLFOLDER</DirectoryRefId>
+      <SuppressRootDirectory>true</SuppressRootDirectory>
+    </HarvestDirectory>
+    <BindPath Include="..\publish" />
+  </ItemGroup>
+</Project>

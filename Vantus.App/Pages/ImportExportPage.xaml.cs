@@ -1,15 +1,16 @@
-using Microsoft.UI.Xaml.Controls;
+using System.Windows.Controls;
 using Vantus.App.ViewModels;
 
 namespace Vantus.App.Pages;
 
-public sealed partial class ImportExportPage : Page
+public partial class ImportExportPage : Page
 {
     public ImportExportPageViewModel ViewModel { get; }
 
     public ImportExportPage()
     {
-        this.InitializeComponent();
+        InitializeComponent();
         ViewModel = App.GetService<ImportExportPageViewModel>();
+        DataContext = this;
     }
 }

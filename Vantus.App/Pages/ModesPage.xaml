@@ -1,42 +1,47 @@
-<Page
-    x:Class="Vantus.App.Pages.ModesPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:Vantus.App.ViewModels"
-    mc:Ignorable="d">
-
+<Page x:Class="Vantus.App.Pages.ModesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="clr-namespace:Vantus.App.ViewModels"
+      mc:Ignorable="d"
+      Title="Modes &amp; Presets">
     <ScrollViewer>
-        <StackPanel Spacing="20" Padding="24">
-            <TextBlock Text="Modes &amp; Presets" Style="{StaticResource TitleTextBlockStyle}" />
+        <StackPanel Margin="24">
+            <TextBlock Text="Modes &amp; Presets" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20" />
+            
+            <TextBlock Text="Choose a preset configuration to quickly apply recommended settings." Margin="0,0,0,20" />
 
-            <TextBlock Text="Choose a preset configuration to quickly apply recommended settings." Style="{StaticResource BodyTextBlockStyle}" />
+            <TextBlock Text="Select Preset" Margin="0,0,0,5"/>
+            <ComboBox ItemsSource="{Binding ViewModel.AvailablePresets}" SelectedItem="{Binding ViewModel.SelectedPreset, Mode=TwoWay}" Width="300" HorizontalAlignment="Left" Margin="0,0,0,20"/>
 
-            <ComboBox Header="Select Preset" ItemsSource="{x:Bind ViewModel.AvailablePresets}" SelectedItem="{x:Bind ViewModel.SelectedPreset, Mode=TwoWay}" Width="300" />
-
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <Button Content="Preview Changes" Command="{x:Bind ViewModel.PreviewChangesCommand}" />
-                <Button Content="Apply Preset" Command="{x:Bind ViewModel.ApplyPresetCommand}" Style="{StaticResource AccentButtonStyle}" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Preview Changes" Command="{Binding ViewModel.PreviewChangesCommand}" Margin="0,0,10,0" Padding="10,5"/>
+                <Button Content="Apply Preset" Command="{Binding ViewModel.ApplyPresetCommand}" Padding="10,5"/>
             </StackPanel>
-
-            <TextBlock>
+            
+            <TextBlock Margin="0,20,0,10">
                 <Run Text="Active Preset: " />
-                <Run Text="{x:Bind ViewModel.ActivePreset, Mode=OneWay}" FontWeight="Bold" />
+                <Run Text="{Binding ViewModel.ActivePreset, Mode=OneWay}" FontWeight="Bold" />
             </TextBlock>
 
-            <ItemsControl ItemsSource="{x:Bind ViewModel.Diffs, Mode=OneWay}">
+            <ItemsControl ItemsSource="{Binding ViewModel.Diffs}">
                  <ItemsControl.ItemTemplate>
-                     <DataTemplate x:DataType="vm:DiffGroup">
+                     <DataTemplate DataType="{x:Type vm:DiffGroup}">
                           <StackPanel Margin="0,10">
-                              <TextBlock Text="{x:Bind Page}" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,0,0,8"/>
-                              <ItemsControl ItemsSource="{x:Bind Items}">
+                              <TextBlock Text="{Binding Page}" FontWeight="Bold" Margin="0,0,0,8"/>
+                              <ItemsControl ItemsSource="{Binding Items}">
                                    <ItemsControl.ItemTemplate>
-                                       <DataTemplate x:DataType="vm:DiffItem">
-                                           <Grid ColumnDefinitions="2*,1*,1*" Margin="0,4">
-                                                <TextBlock Text="{x:Bind Label}" Grid.Column="0"/>
-                                                <TextBlock Text="{x:Bind OldValue}" Grid.Column="1" Foreground="Red" Opacity="0.8"/>
-                                                <TextBlock Text="{x:Bind NewValue}" Grid.Column="2" Foreground="Green" FontWeight="Bold"/>
+                                       <DataTemplate DataType="{x:Type vm:DiffItem}">
+                                           <Grid Margin="0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                    <ColumnDefinition Width="1*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Label}" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding OldValue}" Grid.Column="1" Foreground="Red" Opacity="0.8"/>
+                                                <TextBlock Text="{Binding NewValue}" Grid.Column="2" Foreground="Green" FontWeight="Bold"/>
                                            </Grid>
                                        </DataTemplate>
                                    </ItemsControl.ItemTemplate>

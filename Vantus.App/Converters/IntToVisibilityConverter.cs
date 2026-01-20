@@ -1,11 +1,13 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Data;
+using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
 namespace Vantus.App.Converters;
 
 public class IntToVisibilityConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, string language)
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         if (value is int count)
         {
@@ -14,7 +16,7 @@ public class IntToVisibilityConverter : IValueConverter
         return Visibility.Collapsed;
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, string language)
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }
