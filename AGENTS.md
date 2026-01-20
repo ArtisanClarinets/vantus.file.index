@@ -1,113 +1,229 @@
-# AGENTS_WPF.md — Vantus File Indexer Development Guide (WPF stack)
+# AGENTS_WPF.md — Vantus File Indexer Agent Technical Specification
 
-This guide is for AI coding agents working on the Vantus File Indexer repo using **WPF (.NET 8+)** for the Settings UI.
+**Target Audience:** AI Coding Agents & Developers
+**Source of Truth:** Aligns with `PROMPT.MD`
+**Related Guide:** [AGENT.md](./AGENT.md) (General Developer Guide)
 
-## 1) Project overview
+This document provides the **comprehensive technical specifications** and **implementation rules** for the Vantus File Indexer Settings UI.
 
-- **Vantus.Core** — settings models, schema/registry, persistence, presets, policy enforcement, import/export, IPC interfaces
-- **Vantus.App** — WPF desktop application (navigation shell + metadata-driven settings pages)
-- **Vantus.Tests** — xUnit unit tests
+---
 
-Core principles:
-- Settings are metadata-driven from `settings_definitions.json`
-- Pages do not hardcode control lists; they render from registry filtered by IA page
-- Policy locks override user values (effective state)
+## 1. High-Level Success Criteria
 
-## 2) Tech stack
+The Settings UI implementation is considered complete only when:
+1.  **App Compiles & Launches:** No build errors on .NET 8+.
+2.  **Navigation:** Left navigation contains **every** IA page and routes correctly.
+3.  **Metadata-Driven:** Every page renders settings using the `settings_definitions.json` registry (no hardcoded pages).
+4.  **Presets:** Presets apply correctly with a **diff preview** (grouped by page) before applying.
+5.  **Policy Locks:** Policy locks work and are visible in UI (lock icon, disabled control, reason).
+6.  **Import/Export:** Works with preview diff; reset restores defaults.
+7.  **Tests:** Unit tests pass and cover core behaviors (presets, policy, persistence).
+8.  **Docs:** Documentation exists and matches the implementation.
 
-- .NET 8+
-- WPF
-- CommunityToolkit.Mvvm
-- Microsoft.Extensions.Hosting / DI
-- System.Text.Json
-- xUnit
+---
 
-Styling (repo-pinned):
-- Prefer **WPF UI** or **ModernWpf** for Fluent-like visuals.
+## 2. Tech Stack & Constraints
 
-Do NOT introduce Windows App SDK / WinUI 3 packages.
+### Required Stack
+-   **Framework:** **WPF** on .NET 8+ (Windows-only).
+-   **MVVM:** `CommunityToolkit.Mvvm`.
+-   **DI:** `Microsoft.Extensions.Hosting` + `Microsoft.Extensions.DependencyInjection`.
+-   **Serialization:** `System.Text.Json` (Strict usage).
+-   **Testing:** xUnit.
 
-## 3) Build & test commands
+### Styling (Repo-Pinned)
+Use **one** of the following (do not mix):
+-   **WPF UI** (Recommended): Fluent-like navigation + controls.
+-   **ModernWpf**: WinUI-like styles for WPF controls.
 
-```powershell
-dotnet build Vantus.FileIndexer.sln
-dotnet test Vantus.Tests/Vantus.Tests.csproj
-dotnet run --project Vantus.App/Vantus.App.csproj
-```
+### strict Constraints
+-   **NO WinUI 3 / Windows App SDK:** Do not introduce `Microsoft.WindowsAppSDK` for the Settings UI.
+-   **UI Thread Safety:** Never perform IO, JSON parsing, or "diff" computation synchronously on the UI thread. Use `Dispatcher.InvokeAsync`.
+-   **Explorer Integration:** Internal Explorer logic stays native/C++; Settings UI only configures it via IPC.
 
-Clean rebuild:
-```powershell
-dotnet clean
-Remove-Item -Recurse -Force obj, bin -ErrorAction SilentlyContinue
-dotnet restore
-dotnet build Vantus.FileIndexer.sln
-```
+---
 
-## 4) Repo layout
+## 3. Repo Layout
 
 | Path | Purpose |
 |------|---------|
 | `Vantus.Core/Models/` | Settings models, schema types |
 | `Vantus.Core/Services/` | Store, registry, preset manager, policy engine, import/export |
 | `Vantus.Core/Engine/` | `IEngineClient` + IPC abstractions |
-| `Vantus.App/` | WPF app shell, pages, UI services |
+| `Vantus.App/` | **WPF** app shell, pages, UI services |
 | `Vantus.App/Views/` | Page views (thin), bind to registry-driven VMs |
 | `Vantus.App/Controls/` | Reusable settings UI components + templates |
 | `Vantus.Tests/` | Unit tests |
-| `docs/` | Docs |
-| `settings_definitions.json` | Settings registry metadata |
+| `docs/` | Documentation |
+| `settings_definitions.json` | Settings registry metadata (Source of Truth) |
 | `policies.json` | Example policy file |
 
-## 5) UI thread safety (WPF)
+---
 
-- Do not do IO or heavy compute on the UI thread.
-- Use async and marshal back via:
-  - `Application.Current.Dispatcher.InvokeAsync(...)` or `Dispatcher.BeginInvoke(...)`
+## 4. Information Architecture (IA)
 
-## 6) JSON & persistence conventions
+The application must implement the following structure exactly:
 
-- `System.Text.Json` only
-- Shared serializer options
-- Persist to `%LocalAppData%\Vantus\settings.json`
-- Always include `schema_version`
-- Preserve unknown keys
+### General
+-   Appearance & Language
+-   Startup & Tray
+-   Modes & Presets
+-   Power & Performance
+-   Data Handling
 
-## 7) Effective value resolution
+### Workspaces
+-   Workspace Switcher
+-   Workspace Defaults
+-   Import & Export
 
-1) Policy lock
-2) User value
-3) Preset default
-4) Schema fallback
+### Locations
+-   Included Locations
+-   Exclusions
+-   Location Policy (Detail)
 
-Expose to UI:
-- `Value`
-- `IsLocked`
-- `LockReason`
-- `RequiresRestart`
-- `IsDangerousAction`
+### Indexing
+-   Status
+-   Change Detection
+-   Performance
+-   Content Limits
 
-## 8) Settings renderer pattern (WPF)
+### AI Models
+-   Runtime & Hardware
+-   Model Set
+-   Quality Controls
 
-- Use ItemsControl/ListView to render settings definitions.
-- Use DataTemplates keyed by `control_type`.
-- Bind to a `SettingItemViewModel` that handles:
-  - getting/setting values
-  - validation
-  - lock state
-  - restart required badge
+### Extraction
+-   Documents (PDF/Office/Text)
+-   Images
+-   Code
+-   Archives
+-   Media (Audio/Video)
+-   Email & Exports
 
-## 9) Testing guidelines
+### Organize & Automations
+-   Organizing Mode
+-   Rules
+-   Safety & Undo
+-   Review Queue
 
-- Use temp directories for persistence tests
-- Avoid timing-sensitive tests
-- Cover:
-  - preset apply sets all defaults
-  - policy locks override and block changes
-  - import/export roundtrip stable
-  - migration example
+### Tags & Taxonomy
+-   Tagging Behavior
+-   Vocabulary & Synonyms
+-   Windows Metadata Fields
 
-## 10) Engine IPC stub conventions
+### Partners
+-   Partner Directory
+-   Matching Logic
+-   Partner Policies
 
-- `IEngineClient` in `Vantus.Core`
-- Provide `StubEngineClient` for local dev
-- UI depends only on interface (DI)
+### Search
+-   Search Mode
+-   Results & Previews
+-   Ranking & Facets
+
+### Windows Integration
+-   Explorer Surfaces
+-   Context Menu Actions
+-   Windows Search Integration
+
+### Privacy & Security
+-   Local Storage & Encryption
+-   Access Controls
+-   Sensitive Data Protections
+-   Keys & Rotation
+
+### Compliance & Audit
+-   Audit Log
+-   Retention & Legal Hold
+-   Policy Reports
+
+### Notifications
+-   Alerts & Banners
+-   Quiet Hours
+
+### Storage & Maintenance
+-   Storage Locations
+-   Cache Controls
+-   Maintenance & Repair
+-   Backup & Restore
+
+### Diagnostics
+-   System Status
+-   Performance Trace
+-   Export Diagnostics Bundle
+-   Advanced (Power User)
+
+### Admin (Managed)
+-   Policy Overview
+-   Enforced Restrictions
+-   Deployment & Updates
+
+### About
+-   Version & Licenses
+-   Reset
+
+---
+
+## 5. Implementation Specifications
+
+### 5.1 Settings Registry (`settings_definitions.json`)
+The registry is the authoritative definition for UI, policy, and defaulting.
+-   **Fields:** `setting_id`, `page`, `section`, `label`, `helper_text`, `control_type`, `value_type`, `allowed_values`, `defaults` (per preset), `scope`, `requires_restart`, `policy_lockable`, `visibility`, `dangerous_action`.
+-   **Control Types:** `toggle`, `slider`, `dropdown`, `multi_select`, `button`, `status`.
+
+### 5.2 Metadata-Driven Renderer
+-   **Do not hardcode controls.**
+-   Load `settings_definitions.json` into a `SettingsRegistry`.
+-   Use `ItemsControl` / `ListView` with `DataTemplate` keyed by `control_type`.
+-   Bind to a `SettingItemViewModel` handling validation, lock state, and restart badges.
+
+### 5.3 Presets System
+-   **Apply:** Sets every setting to the preset's defaults.
+-   **Preview:** Shows a diff grouped by page before applying.
+-   **Tracking:** Track `ActivePreset` and `IsCustomized`.
+
+### 5.4 Policy Enforcement (Managed Mode)
+-   **Resolution:** 1) Policy Lock -> 2) User Value -> 3) Preset Default -> 4) Schema Fallback.
+-   **UI:** Locked controls must be disabled, show a lock icon, and display the `LockReason`.
+
+### 5.5 Persistence
+-   File: `%LocalAppData%\Vantus\settings.json`
+-   Must include `schema_version`.
+-   **Migrations:** Carry forward unknown keys; implement rename maps.
+
+### 5.6 Import / Export
+-   Export global/workspace settings.
+-   Import with validation and **preview diff**.
+
+### 5.7 Engine IPC
+-   Define `IEngineClient` in `Vantus.Core`.
+-   Implement `StubEngineClient` for local development.
+-   UI must only depend on the interface (DI).
+
+---
+
+## 6. Build & Test Commands
+
+```powershell
+# Build
+dotnet build Vantus.FileIndexer.sln
+
+# Test
+dotnet test Vantus.Tests/Vantus.Tests.csproj
+
+# Run App
+dotnet run --project Vantus.App/Vantus.App.csproj
+
+# Clean Rebuild
+dotnet clean
+Remove-Item -Recurse -Force obj, bin -ErrorAction SilentlyContinue
+dotnet restore
+dotnet build Vantus.FileIndexer.sln
+```
+
+## 7. Quality Standards
+
+-   **Code Style:** PascalCase public, _camelCase private, Async suffix.
+-   **Nullability:** Enabled (`<Nullable>enable</Nullable>`).
+-   **Error Handling:** Surface recoverable issues to UI; never swallow exceptions silently.
+-   **Documentation:** Maintain docs in `docs/` matching the code.
