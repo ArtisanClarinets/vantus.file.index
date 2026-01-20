@@ -9,6 +9,24 @@ public interface IEngineClient
     Task ReindexLocationAsync(string path);
     Task RebuildIndexAsync();
     Task<TestExtractionResult> TestExtractionAsync(string filePath);
+    Task<SearchResponse> SearchAsync(string query, int limit = 50, int offset = 0);
+}
+
+public class SearchResponse
+{
+    public List<SearchResultItem> Results { get; set; } = new();
+    public int TotalCount { get; set; }
+}
+
+public class SearchResultItem
+{
+    public long Id { get; set; }
+    public string FilePath { get; set; } = "";
+    public string FileName { get; set; } = "";
+    public string? Snippet { get; set; }
+    public double Score { get; set; }
+    public List<string> Tags { get; set; } = new();
+    public string LastModified { get; set; } = "";
 }
 
 public enum ComputeDevice
@@ -92,6 +110,27 @@ public class EngineClientStub : IEngineClient
             Metadata = new List<string> { "Author: Test", "Created: 2026-01-01" },
             Tags = new List<string> { "test", "sample" },
             ProcessingTimeMs = 50
+        });
+    }
+
+    public Task<SearchResponse> SearchAsync(string query, int limit = 50, int offset = 0)
+    {
+        return Task.FromResult(new SearchResponse
+        {
+            TotalCount = 1,
+            Results = new List<SearchResultItem>
+            {
+                new SearchResultItem
+                {
+                    Id = 1,
+                    FilePath = @"C:\Mock\Result.txt",
+                    FileName = "Result.txt",
+                    Snippet = "Found this mock result for " + query,
+                    Score = 1.0,
+                    Tags = new List<string> { "mock" },
+                    LastModified = DateTime.UtcNow.ToString("O")
+                }
+            }
         });
     }
 }

@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option csharp_namespace = "Vantus.Engine.Protos";
+
+package vantus.engine;
+
+service Engine {
+  rpc GetIndexStatus (Empty) returns (IndexStatusResponse);
+  rpc PauseIndexing (Empty) returns (Empty);
+  rpc ResumeIndexing (Empty) returns (Empty);
+  rpc SetComputePreference (ComputePreferenceRequest) returns (Empty);
+  rpc ReindexLocation (ReindexLocationRequest) returns (Empty);
+  rpc RebuildIndex (Empty) returns (Empty);
+  rpc TestExtraction (TestExtractionRequest) returns (TestExtractionResult);
+  rpc Search (SearchRequest) returns (SearchResponse);
+}
+
+message Empty {}
+
+message IndexStatusResponse {
+  bool is_indexing = 1;
+  int32 files_indexed = 2;
+  int32 files_remaining = 3;
+  double progress_percent = 4;
+  string current_location = 5;
+  ComputeDevice active_device = 6;
+  string last_index_time = 7;
+}
+
+message SearchRequest {
+  string query = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+  repeated string filter_tags = 4;
+  repeated string filter_types = 5;
+}
+
+message SearchResponse {
+  repeated SearchResultItem results = 1;
+  int32 total_count = 2;
+}
+
+message SearchResultItem {
+  int64 id = 1;
+  string file_path = 2;
+  string file_name = 3;
+  string snippet = 4;
+  double score = 5;
+  repeated string tags = 6;
+  string last_modified = 7;
+}
+
+enum ComputeDevice {
+  AUTO = 0;
+  NPU = 1;
+  IGPU = 2;
+  CPU = 3;
+}
+
+message ComputePreferenceRequest {
+  ComputeDevice device = 1;
+}
+
+message ReindexLocationRequest {
+  string path = 1;
+}
+
+message TestExtractionRequest {
+  string file_path = 1;
+}
+
+message TestExtractionResult {
+  bool success = 1;
+  string file_path = 2;
+  string file_type = 3;
+  string extracted_text = 4;
+  repeated string metadata = 5;
+  repeated string tags = 6;
+  string error = 7;
+  int64 processing_time_ms = 8;
+}

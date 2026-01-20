@@ -1,0 +1,38 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" 
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  
+  <Package Name="Vantus File Indexer" 
+           Manufacturer="Vantus Inc." 
+           Version="1.0.0.0" 
+           UpgradeCode="58925400-3571-4608-981e-028882014767"
+           Scope="perMachine"
+           Language="1033">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Icon for Add/Remove Programs -->
+    <Icon Id="AppIcon" SourceFile="publish\Vantus.App.exe" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+
+    <!-- UI Configuration -->
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="Vantus.Installer\License.rtf" />
+    <!-- <WixVariable Id="WixUIBannerBmp" Value="path\to\banner.bmp" /> -->
+    <!-- <WixVariable Id="WixUIDialogBmp" Value="path\to\dialog.bmp" /> -->
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Vantus File Indexer">
+        <Directory Id="ENGINEFOLDER" Name="Engine" />
+      </Directory>
+    </StandardDirectory>
+
+    <Feature Id="Main" Title="Vantus File Indexer" Level="1">
+      <ComponentGroupRef Id="AppComponents" />
+      <ComponentGroupRef Id="EngineComponents" />
+      <ComponentRef Id="MainExecutableShortcut" />
+    </Feature>
+
+  </Package>
+</Wix>

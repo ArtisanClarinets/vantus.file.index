@@ -1,25 +1,30 @@
-<Window
-    x:Class="Vantus.App.MainWindow"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ui:FluentWindow x:Class="Vantus.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodels="clr-namespace:Vantus.App.ViewModels"
+        mc:Ignorable="d"
+        Title="{Binding ApplicationTitle}"
+        Height="700" Width="1000"
+        d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
+        WindowStartupLocation="CenterScreen">
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-
-        <Grid x:Name="AppTitleBar" Height="32" Grid.Row="0">
-            <TextBlock Text="Vantus" VerticalAlignment="Center" Margin="12,0,0,0"/>
-        </Grid>
-
-        <NavigationView x:Name="NavView" Grid.Row="1">
-            <NavigationView.AutoSuggestBox>
-                <AutoSuggestBox x:Name="SearchBox" QueryIcon="Find"/>
-            </NavigationView.AutoSuggestBox>
-            <Frame x:Name="ContentFrame"/>
-        </NavigationView>
-
-        <InfoBar x:Name="FooterInfoBar" Grid.Row="2" IsOpen="False"/>
+        <ui:NavigationView x:Name="RootNavigation"
+                           MenuItemsSource="{Binding NavigationItems}"
+                           IsPaneOpen="True"
+                           SelectionChanged="RootNavigation_SelectionChanged">
+             <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox PlaceholderText="Search settings..." />
+             </ui:NavigationView.AutoSuggestBox>
+             
+             <ui:NavigationView.ContentOverlay>
+                 <Grid>
+                    <Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/>
+                 </Grid>
+             </ui:NavigationView.ContentOverlay>
+        </ui:NavigationView>
     </Grid>
-</Window>
+</ui:FluentWindow>

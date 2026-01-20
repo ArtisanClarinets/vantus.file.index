@@ -1,4 +1,4 @@
-# PROMPT_WPF.md — Coding Agent Master Prompt (paste into your agent)
+# PROMPT_WPF.md — Coding Agent Master Prompt
 
 You are building the **Vantus File Indexer** desktop app’s **Settings experience** end-to-end based on the provided IA + defaults matrix. Deliver a production-grade **WPF (.NET 8+)** settings app that a Fortune-500 team could ship.
 
@@ -53,7 +53,7 @@ Do NOT introduce Windows App SDK packages (`Microsoft.WindowsAppSDK`) or WinUI 3
 Treat these as canonical inputs (do not invent labels unless instructed):
 
 - `/docs/settings-ia.md` — sitemap and page structure (provided)
-- `/docs/settings-defaults-matrix.md` (or equivalent) — exact control labels, helper text, types, allowed values, defaults per preset (provided)
+- `/vantus_settings_ia_defaults.md` — exact control labels, helper text, types, allowed values, defaults per preset (provided)
 
 If these are missing:
 - Create placeholders with stable IDs and `TODO:` markers.
@@ -307,34 +307,29 @@ No real service implementation required. UI depends only on interface (DI).
 8) Implement import/export + preview.
 9) Add tests + docs; run full build/test.
 
-## 9) Multi-agent coordination (opencode)
+## 9) Execution Strategy
 
-You may spawn sub-agents via `opencode`. Spawn these immediately:
+You are an autonomous agent. Use the `TodoWrite` tool to track your progress. Execute the following phases sequentially:
 
-1) Schema Agent
-```bash
-opencode agent create --name settings-schema --task "Create settings_definitions.json schema, IDs, defaults per preset, and docs tables placeholders (no invented labels if missing source)"
-```
+1) **Schema & Models**
+   - Create `settings_definitions.json` schema, IDs, defaults per preset (from `vantus_settings_ia_defaults.md`).
+   - Create typed C# models in `Vantus.Core`.
 
-2) WPF Shell Agent
-```bash
-opencode agent create --name wpf-shell --task "Implement WPF settings shell with left nav, routing, page templates, settings search + highlight"
-```
+2) **WPF Shell**
+   - Implement WPF settings shell with left nav, routing, page templates.
+   - Implement settings search + highlight.
 
-3) Presets & Policy Agent
-```bash
-opencode agent create --name presets-policy --task "Implement PresetManager, diff preview, PolicyEngine with locked effective values and UI binding model"
-```
+3) **Presets & Policy**
+   - Implement `PresetManager` and diff preview.
+   - Implement `PolicyEngine` with locked effective values and UI binding model.
 
-4) Import/Export + Tests Agent
-```bash
-opencode agent create --name io-tests --task "Implement persistence, import/export with diff preview, migration scaffolding, and core unit tests"
-```
+4) **Persistence & I/O**
+   - Implement persistence (load/save).
+   - Implement Import/Export with diff preview.
+   - Add core unit tests.
 
-5) Docs Agent
-```bash
-opencode agent create --name docs --task "Write docs/settings-ia.md, docs/presets.md, docs/policy-management.md from registry + IA"
-```
+5) **Documentation**
+   - Update `docs/settings-ia.md`, `docs/presets.md`, `docs/policy-management.md` to match implementation.
 
 ## 10) Final instruction
 

@@ -1,0 +1,135 @@
+<Page x:Class="Vantus.App.Views.SearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:Vantus.App.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+      Title="Search">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search Bar -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <ui:TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                        PlaceholderText="Search files by name or content..."
+                        Icon="{ui:SymbolIcon Search24}"
+                        VerticalAlignment="Center"
+                        Height="40"
+                        FontSize="14">
+                <ui:TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                </ui:TextBox.InputBindings>
+            </ui:TextBox>
+            
+            <ui:Button Grid.Column="1" 
+                       Content="Search" 
+                       Icon="{ui:SymbolIcon Search24}"
+                       Command="{Binding SearchCommand}" 
+                       Appearance="Primary"
+                       Height="40"
+                       Margin="12,0,0,0" 
+                       Padding="24,0"/>
+        </Grid>
+
+        <!-- Status / Progress -->
+        <StackPanel Grid.Row="1" Margin="0,0,0,16">
+            <ui:ProgressRing IsIndeterminate="True" 
+                             Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             HorizontalAlignment="Center"
+                             Width="40" Height="40"
+                             Margin="0,0,0,12"/>
+            
+            <TextBlock Text="{Binding StatusMessage}" 
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                       HorizontalAlignment="Center"
+                       Visibility="{Binding IsSearching, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        </StackPanel>
+
+        <!-- Results -->
+        <Grid Grid.Row="2">
+            <!-- No Results State -->
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Visibility="{Binding NoResultsFound, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ui:SymbolIcon Symbol="DocumentSearch24" FontSize="48" Foreground="{DynamicResource TextFillColorTertiaryBrush}" Margin="0,0,0,16"/>
+                <TextBlock Text="No results found" 
+                           FontSize="18" FontWeight="SemiBold" 
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Try adjusting your search terms" 
+                           Foreground="{DynamicResource TextFillColorTertiaryBrush}"
+                           HorizontalAlignment="Center" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Result List -->
+            <ListView ItemsSource="{Binding Results}" 
+                      Visibility="{Binding HasResults, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Margin" Value="0,0,0,8"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewItem">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="0">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ui:Card Padding="16,12" Margin="0,0,4,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- File Icon -->
+                                <ui:SymbolIcon Symbol="Document24" FontSize="24" 
+                                               Foreground="{DynamicResource SystemAccentColorBrush}"
+                                               VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                
+                                <!-- Details -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding FileName}" FontSize="16" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding FilePath}" 
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" 
+                                               FontSize="12"
+                                               TextTrimming="CharacterEllipsis" 
+                                               ToolTip="{Binding FilePath}"/>
+                                </StackPanel>
+                                
+                                <!-- Meta -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <ui:Badge Appearance="Secondary" Content="{Binding Score, StringFormat=P0}" ToolTip="Relevance Score"/>
+                                </StackPanel>
+                            </Grid>
+                        </ui:Card>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </Grid>
+</Page>

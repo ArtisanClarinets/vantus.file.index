@@ -1,604 +1,159 @@
 {
-  "schema_version": "1.0",
-  "last_updated": "2026-01-19",
-  "presets": {
-    "personal": "Personal",
-    "pro": "Pro",
-    "enterprise_private": "Enterprise-Private",
-    "enterprise_automation": "Enterprise-Automation"
-  },
-  "categories": {
-    "general": {
-      "name": "General",
-      "pages": {
-        "appearance_language": {
-          "name": "Appearance & Language",
-          "settings": [
-            { "id": "general.theme", "control_type": "segmented", "label": "Theme", "helper_text": "Match Windows or choose a theme for Vantus.", "allowed_values": ["System", "Light", "Dark"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "System", "pro": "System", "enterprise_private": "System", "enterprise_automation": "System" } },
-            { "id": "general.accent_color", "control_type": "dropdown", "label": "Accent color", "helper_text": "Used for highlights and status indicators.", "allowed_values": ["Windows", "Blue", "Green", "Red", "Purple", "Orange"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Windows", "pro": "Windows", "enterprise_private": "Windows", "enterprise_automation": "Windows" } },
-            { "id": "general.app_language", "control_type": "dropdown", "label": "App language", "helper_text": "Language for menus and settings.", "allowed_values": ["System", "en-US", "es-ES", "fr-FR", "de-DE"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "System", "pro": "System", "enterprise_private": "System", "enterprise_automation": "System" } },
-            { "id": "general.reduce_motion", "control_type": "toggle", "label": "Reduce motion", "helper_text": "Minimize animations for comfort and accessibility.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.increase_contrast", "control_type": "toggle", "label": "Increase contrast", "helper_text": "Improve readability in low-contrast environments.", "allowed_values": ["Inherit OS", "High", "Medium"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Inherit OS", "pro": "Inherit OS", "enterprise_private": "Inherit OS", "enterprise_automation": "Inherit OS" } }
-          ]
-        },
-        "startup_tray": {
-          "name": "Startup & Tray",
-          "settings": [
-            { "id": "general.launch_on_signin", "control_type": "toggle", "label": "Launch Vantus at sign-in", "helper_text": "Start in the background so indexing stays current.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.minimize_to_tray_on_close", "control_type": "toggle", "label": "Minimize to system tray when closed", "helper_text": "Closing the window keeps Vantus running.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.tray_status_badge", "control_type": "toggle", "label": "Show tray status badge", "helper_text": "Shows indexing status and alerts on the tray icon.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.tray_quick_actions", "control_type": "multi_select", "label": "Tray quick actions", "helper_text": "Choose actions available from the tray menu.", "allowed_values": ["Search", "Pause", "Review Queue", "Pause Indexing", "Resume Indexing"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": ["Search", "Pause"], "pro": ["Search", "Pause", "Review Queue"], "enterprise_private": ["Search", "Pause"], "enterprise_automation": ["Pause", "Review Queue"] } }
-          ]
-        },
-        "modes_presets": {
-          "name": "Modes & Presets",
-          "settings": [
-            { "id": "general.preset", "control_type": "dropdown", "label": "Preset", "helper_text": "Applies recommended defaults. You can still customize settings.", "allowed_values": ["Personal", "Pro", "Enterprise-Private", "Enterprise-Automation"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Personal", "pro": "Pro", "enterprise_private": "Enterprise-Private", "enterprise_automation": "Enterprise-Automation" } },
-            { "id": "general.performance_profile", "control_type": "segmented", "label": "Performance profile", "helper_text": "Controls CPU/disk usage and how aggressively Vantus runs.", "allowed_values": ["Quiet", "Balanced", "Performance"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Balanced", "pro": "Performance", "enterprise_private": "Quiet", "enterprise_automation": "Balanced" } },
-            { "id": "general.private_mode", "control_type": "toggle", "label": "Private mode", "helper_text": "Hides content snippets and reduces stored text. Best for shared machines.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.automation_guardrails", "control_type": "dropdown", "label": "Automation guardrails", "helper_text": "How cautious Vantus is about moving/renaming files.", "allowed_values": ["Conservative", "Standard", "Strict"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Conservative", "pro": "Standard", "enterprise_private": "Strict", "enterprise_automation": "Standard" } }
-          ]
-        },
-        "power_performance": {
-          "name": "Power & Performance",
-          "settings": [
-            { "id": "general.pause_on_battery", "control_type": "toggle", "label": "Pause indexing on battery", "helper_text": "Reduce background activity when unplugged.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": false, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.battery_threshold", "control_type": "slider", "label": "Battery threshold", "helper_text": "Pause below this battery level.", "min_value": 10, "max_value": 50, "suffix": "%", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 35, "pro": 25, "enterprise_private": 40, "enterprise_automation": 35 } },
-            { "id": "general.pause_on_low_disk", "control_type": "toggle", "label": "Pause on low disk space", "helper_text": "Prevents caches from filling your drive.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.low_disk_threshold", "control_type": "dropdown", "label": "Low disk threshold", "helper_text": "Amount of free space to keep available.", "allowed_values": ["5 GB", "10 GB", "20 GB", "50 GB"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "10 GB", "pro": "10 GB", "enterprise_private": "20 GB", "enterprise_automation": "10 GB" } },
-            { "id": "general.heavy_tasks_idle_only", "control_type": "toggle", "label": "Only run heavy tasks when idle", "helper_text": "OCR/transcription and deep extraction run when you're away.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "data_handling": {
-          "name": "Data Handling",
-          "settings": [
-            { "id": "general.on_device_only_status", "control_type": "status", "label": "Keep everything on this device", "helper_text": "Vantus processes files locally. No cloud upload is required.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "general.analytics_anonymous", "control_type": "toggle", "label": "Share anonymous usage analytics", "helper_text": "Helps improve performance and stability. Never includes file contents.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "general.crash_reports", "control_type": "toggle", "label": "Allow crash reports", "helper_text": "Sends crash details to improve reliability.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        }
-      }
+  "categories": [
+    { "id": "general", "title": "General", "page_ids": ["general.appearance", "general.startup", "general.modes", "general.power", "general.data"] },
+    { "id": "workspaces", "title": "Workspaces", "page_ids": ["workspaces.switcher", "workspaces.defaults", "workspaces.import"] },
+    { "id": "locations", "title": "Locations", "page_ids": ["locations.included", "locations.exclusions", "locations.policy"] },
+    { "id": "indexing", "title": "Indexing", "page_ids": ["indexing.status", "indexing.change", "indexing.performance", "indexing.limits"] },
+    { "id": "ai", "title": "AI Models", "page_ids": ["ai.runtime", "ai.models", "ai.quality"] },
+    { "id": "extraction", "title": "Extraction", "page_ids": ["extraction.docs", "extraction.images", "extraction.code", "extraction.archives", "extraction.media", "extraction.email"] },
+    { "id": "organize", "title": "Organize & Automations", "page_ids": ["organize.mode", "organize.rules", "organize.safety", "organize.review"] },
+    { "id": "tags", "title": "Tags & Taxonomy", "page_ids": ["tags.behavior", "tags.vocab", "tags.windows"] },
+    { "id": "partners", "title": "Partners", "page_ids": ["partners.directory", "partners.matching", "partners.policies"] },
+    { "id": "search", "title": "Search", "page_ids": ["search.mode", "search.results", "search.ranking"] },
+    { "id": "windows", "title": "Windows Integration", "page_ids": ["windows.surfaces", "windows.context", "windows.search"] },
+    { "id": "privacy", "title": "Privacy & Security", "page_ids": ["privacy.storage", "privacy.access", "privacy.sensitive", "privacy.keys"] },
+    { "id": "compliance", "title": "Compliance & Audit", "page_ids": ["compliance.audit", "compliance.retention", "compliance.reports"] },
+    { "id": "notifications", "title": "Notifications", "page_ids": ["notifications.alerts", "notifications.quiet"] },
+    { "id": "storage", "title": "Storage & Maintenance", "page_ids": ["storage.locations", "storage.cache", "storage.maintenance", "storage.backup"] },
+    { "id": "diagnostics", "title": "Diagnostics", "page_ids": ["diagnostics.status", "diagnostics.trace", "diagnostics.export", "diagnostics.advanced"] },
+    { "id": "admin", "title": "Admin (Managed)", "page_ids": ["admin.policy", "admin.restrictions", "admin.deployment"] },
+    { "id": "about", "title": "About", "page_ids": ["about.version", "about.reset"] }
+  ],
+  "pages": [
+     { "id": "general.appearance", "title": "Appearance & Language", "intro": "Customize the look and feel of the application." },
+     { "id": "general.startup", "title": "Startup & Tray", "intro": "Configure startup behavior and tray icon." },
+     { "id": "general.modes", "title": "Modes & Presets", "intro": "Manage application presets and operating modes." },
+     { "id": "general.power", "title": "Power & Performance", "intro": "Manage power usage and performance." },
+     { "id": "general.data", "title": "Data Handling", "intro": "Configure data handling settings." },
+     
+     { "id": "workspaces.switcher", "title": "Workspace Switcher", "intro": "Switch between workspaces." },
+     { "id": "workspaces.defaults", "title": "Workspace Defaults", "intro": "Configure default workspace settings." },
+     { "id": "workspaces.import", "title": "Import & Export", "intro": "Import and export workspace settings." },
+
+     { "id": "locations.included", "title": "Included Locations", "intro": "Manage locations included in the index." },
+     { "id": "locations.exclusions", "title": "Exclusions", "intro": "Manage locations excluded from the index." },
+     { "id": "locations.policy", "title": "Location Policy", "intro": "Configure location policies." },
+
+     { "id": "indexing.status", "title": "Status", "intro": "View indexing status." },
+     { "id": "indexing.change", "title": "Change Detection", "intro": "Configure change detection settings." },
+     { "id": "indexing.performance", "title": "Performance", "intro": "Configure indexing performance." },
+     { "id": "indexing.limits", "title": "Content Limits", "intro": "Configure content limits." },
+
+     { "id": "ai.runtime", "title": "Runtime & Hardware", "intro": "Configure AI runtime and hardware." },
+     { "id": "ai.models", "title": "Model Set", "intro": "Configure AI models." },
+     { "id": "ai.quality", "title": "Quality Controls", "intro": "Configure AI quality controls." },
+
+     { "id": "extraction.docs", "title": "Documents", "intro": "Configure document extraction." },
+     { "id": "extraction.images", "title": "Images", "intro": "Configure image extraction." },
+     { "id": "extraction.code", "title": "Code", "intro": "Configure code extraction." },
+     { "id": "extraction.archives", "title": "Archives", "intro": "Configure archive extraction." },
+     { "id": "extraction.media", "title": "Media", "intro": "Configure media extraction." },
+     { "id": "extraction.email", "title": "Email & Exports", "intro": "Configure email extraction." },
+
+     { "id": "organize.mode", "title": "Organizing Mode", "intro": "Configure organizing mode." },
+     { "id": "organize.rules", "title": "Rules", "intro": "Configure organizing rules." },
+     { "id": "organize.safety", "title": "Safety & Undo", "intro": "Configure safety and undo settings." },
+     { "id": "organize.review", "title": "Review Queue", "intro": "Manage review queue." },
+
+     { "id": "tags.behavior", "title": "Tagging Behavior", "intro": "Configure tagging behavior." },
+     { "id": "tags.vocab", "title": "Vocabulary & Synonyms", "intro": "Manage vocabulary and synonyms." },
+     { "id": "tags.windows", "title": "Windows Metadata Fields", "intro": "Configure Windows metadata fields." },
+
+     { "id": "partners.directory", "title": "Partner Directory", "intro": "Manage partner directory." },
+     { "id": "partners.matching", "title": "Matching Logic", "intro": "Configure matching logic." },
+     { "id": "partners.policies", "title": "Partner Policies", "intro": "Configure partner policies." },
+
+     { "id": "search.mode", "title": "Search Mode", "intro": "Configure search mode." },
+     { "id": "search.results", "title": "Results & Previews", "intro": "Configure search results and previews." },
+     { "id": "search.ranking", "title": "Ranking & Facets", "intro": "Configure ranking and facets." },
+
+     { "id": "windows.surfaces", "title": "Explorer Surfaces", "intro": "Configure Explorer surfaces." },
+     { "id": "windows.context", "title": "Context Menu Actions", "intro": "Configure context menu actions." },
+     { "id": "windows.search", "title": "Windows Search Integration", "intro": "Configure Windows Search integration." },
+
+     { "id": "privacy.storage", "title": "Local Storage & Encryption", "intro": "Configure local storage and encryption." },
+     { "id": "privacy.access", "title": "Access Controls", "intro": "Configure access controls." },
+     { "id": "privacy.sensitive", "title": "Sensitive Data Protections", "intro": "Configure sensitive data protections." },
+     { "id": "privacy.keys", "title": "Keys & Rotation", "intro": "Manage encryption keys." },
+
+     { "id": "compliance.audit", "title": "Audit Log", "intro": "View audit log." },
+     { "id": "compliance.retention", "title": "Retention & Legal Hold", "intro": "Configure retention and legal hold." },
+     { "id": "compliance.reports", "title": "Policy Reports", "intro": "View policy reports." },
+
+     { "id": "notifications.alerts", "title": "Alerts & Banners", "intro": "Configure alerts and banners." },
+     { "id": "notifications.quiet", "title": "Quiet Hours", "intro": "Configure quiet hours." },
+
+     { "id": "storage.locations", "title": "Storage Locations", "intro": "Manage storage locations." },
+     { "id": "storage.cache", "title": "Cache Controls", "intro": "Configure cache controls." },
+     { "id": "storage.maintenance", "title": "Maintenance & Repair", "intro": "Perform maintenance and repair." },
+     { "id": "storage.backup", "title": "Backup & Restore", "intro": "Backup and restore settings." },
+
+     { "id": "diagnostics.status", "title": "System Status", "intro": "View system status." },
+     { "id": "diagnostics.trace", "title": "Performance Trace", "intro": "View performance trace." },
+     { "id": "diagnostics.export", "title": "Export Diagnostics Bundle", "intro": "Export diagnostics bundle." },
+     { "id": "diagnostics.advanced", "title": "Advanced", "intro": "Advanced settings." },
+
+     { "id": "admin.policy", "title": "Policy Overview", "intro": "View policy overview." },
+     { "id": "admin.restrictions", "title": "Enforced Restrictions", "intro": "View enforced restrictions." },
+     { "id": "admin.deployment", "title": "Deployment & Updates", "intro": "Configure deployment and updates." },
+
+     { "id": "about.version", "title": "Version & Licenses", "intro": "View version and licenses." },
+     { "id": "about.reset", "title": "Reset", "intro": "Reset application settings." }
+  ],
+  "settings": [
+    {
+      "setting_id": "general.theme",
+      "page": "general.appearance",
+      "section": "Appearance",
+      "label": "App Theme",
+      "helper_text": "Select the visual theme for the application.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["Light", "Dark", "System"],
+      "defaults": { "personal": "System", "pro": "Dark", "enterprise_private": "System", "enterprise_automation": "System" }
     },
-    "workspaces": {
-      "name": "Workspaces",
-      "pages": {
-        "workspace_switcher": {
-          "name": "Workspace Switcher",
-          "settings": [
-            { "id": "workspace.active_workspace", "control_type": "dropdown", "label": "Active workspace", "helper_text": "Switch configurations for different contexts (Personal/Work/Client).", "allowed_values": ["Personal", "Work", "Client A", "Client B"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Personal", "pro": "Pro", "enterprise_private": "Work", "enterprise_automation": "Work" } },
-            { "id": "workspace.lock_switching", "control_type": "toggle", "label": "Lock workspace switching", "helper_text": "Require Windows Hello to switch workspaces.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "workspace_defaults": {
-          "name": "Workspace Defaults",
-          "settings": [
-            { "id": "workspace.default_tag_namespace", "control_type": "dropdown", "label": "Default tag namespace", "helper_text": "Applied when new tags are created.", "allowed_values": ["Personal", "Work", "Client"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Personal", "pro": "Work", "enterprise_private": "Work", "enterprise_automation": "Work" } },
-            { "id": "workspace.default_organizing_mode", "control_type": "dropdown", "label": "Default organizing mode", "helper_text": "Used for new locations unless overridden.", "allowed_values": ["Suggestions only", "Approval required", "Index only", "Trusted rules only"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Suggestions only", "pro": "Approval required", "enterprise_private": "Index only", "enterprise_automation": "Trusted rules only" } },
-            { "id": "workspace.default_preview_behavior", "control_type": "dropdown", "label": "Default preview behavior", "helper_text": "Controls snippets/previews across the workspace.", "allowed_values": ["Full previews", "Safe previews", "No previews"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Full previews", "pro": "Full previews", "enterprise_private": "Safe previews", "enterprise_automation": "Safe previews" } }
-          ]
-        },
-        "import_export": {
-          "name": "Import & Export",
-          "settings": [
-            { "id": "action.export_workspace_settings", "control_type": "button", "label": "Export workspace settings", "helper_text": "Save a portable configuration file.", "button_text": "Export", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.import_workspace_settings", "control_type": "button", "label": "Import workspace settings", "helper_text": "Replace settings from a configuration file.", "button_text": "Import", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
+    {
+      "setting_id": "general.language",
+      "page": "general.appearance",
+      "section": "Language",
+      "label": "Language",
+      "helper_text": "Select the application language.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["English", "Spanish", "French", "German", "Japanese"],
+      "defaults": { "personal": "English" }
     },
-    "locations": {
-      "name": "Locations",
-      "pages": {
-        "included_locations": {
-          "name": "Included Locations",
-          "settings": [
-            { "id": "action.locations_add_folder", "control_type": "button", "label": "Add folder…", "helper_text": "Add a location to index.", "button_text": "Browse", "scope": "location", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.locations_add_drive", "control_type": "button", "label": "Add drive…", "helper_text": "Index an entire drive. Recommended only for secondary drives.", "button_text": "Select", "scope": "location", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.locations_add_share", "control_type": "button", "label": "Add network share…", "helper_text": "Index SMB shares (may be slower).", "button_text": "Connect", "scope": "location", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "location.index_enabled", "control_type": "toggle", "label": "Index this location", "helper_text": "Include files from this location in the index.", "scope": "location", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "location.allow_organizing", "control_type": "toggle", "label": "Allow organizing actions", "helper_text": "Allow moves/renames/taxonomy actions in this location.", "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": true } },
-            { "id": "location.treat_as_sensitive", "control_type": "toggle", "label": "Treat as sensitive", "helper_text": "Stricter retention and preview rules for this location.", "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "exclusions": {
-          "name": "Exclusions",
-          "settings": [
-            { "id": "locations.excluded_folders", "control_type": "list", "label": "Excluded folders", "helper_text": "Folders that will never be indexed.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": ["$RECYCLE.BIN", "System Volume Information", ".Trash-*"], "pro": ["$RECYCLE.BIN", "System Volume Information", ".Trash-*"], "enterprise_private": ["$RECYCLE.BIN", "System Volume Information", ".Trash-*", "AppData"], "enterprise_automation": ["$RECYCLE.BIN", "System Volume Information", ".Trash-*", "AppData"] } },
-            { "id": "locations.excluded_patterns", "control_type": "token_list", "label": "Excluded patterns", "helper_text": "Glob patterns like node_modules or *.tmp.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": ["node_modules", ".git", "bin", "obj"], "pro": ["node_modules", ".git", "bin", "obj", "dist", "build"], "enterprise_private": ["node_modules", ".git", "bin", "obj", "AppData*"], "enterprise_automation": ["node_modules", ".git", "bin", "obj", "AppData*"] } },
-            { "id": "locations.excluded_file_types", "control_type": "list", "label": "Excluded file types", "helper_text": "File extensions that won't be processed.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": [".exe", ".dll", ".sys"], "pro": [".exe", ".dll", ".sys"], "enterprise_private": [".exe", ".dll", ".sys", ".pst"], "enterprise_automation": [".exe", ".dll", ".sys"] } }
-          ]
-        },
-        "location_policy_detail": {
-          "name": "Location Policy (Detail)",
-          "settings": [
-            { "id": "location.index_depth", "control_type": "dropdown", "label": "Index depth", "helper_text": "How much content is analyzed.", "allowed_values": ["Metadata only", "Full content", "Full content without retention"], "scope": "location", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Full content", "pro": "Full content", "enterprise_private": "Metadata only", "enterprise_automation": "Full content" } },
-            { "id": "location.auto_tagging", "control_type": "toggle", "label": "Auto-tagging", "helper_text": "Assign tags automatically as files are indexed.", "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": true } },
-            { "id": "location.partner_matching", "control_type": "toggle", "label": "Partner matching", "helper_text": "Assign a client/vendor/project based on content and context.", "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "location.organizing_mode", "control_type": "dropdown", "label": "Organizing mode", "helper_text": "Controls moves/renames.", "allowed_values": ["Suggestions only", "Approval required", "Index only", "Trusted rules only"], "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Suggestions only", "pro": "Approval required", "enterprise_private": "Index only", "enterprise_automation": "Trusted rules only" } },
-            { "id": "location.heavy_tasks_schedule", "control_type": "dropdown", "label": "Heavy tasks schedule", "helper_text": "OCR/transcription timing.", "allowed_values": ["Idle only", "Background", "Scheduled"], "scope": "location", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Idle only", "pro": "Idle only", "enterprise_private": "Idle only", "enterprise_automation": "Idle only" } },
-            { "id": "location.max_file_size_to_process", "control_type": "dropdown", "label": "Max file size to process", "helper_text": "Skip huge files to keep indexing fast.", "allowed_values": ["100 MB", "250 MB", "500 MB", "1 GB"], "scope": "location", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "250 MB", "pro": "500 MB", "enterprise_private": "100 MB", "enterprise_automation": "250 MB" } }
-          ]
-        }
-      }
+    {
+      "setting_id": "general.startup_launch",
+      "page": "general.startup",
+      "section": "Startup",
+      "label": "Launch on startup",
+      "helper_text": "Automatically start Vantus when you log in.",
+      "control_type": "toggle",
+      "value_type": "bool",
+      "defaults": { "personal": true, "enterprise_automation": true }
     },
-    "indexing": {
-      "name": "Indexing",
-      "pages": {
-        "status": {
-          "name": "Status",
-          "settings": [
-            { "id": "indexing.enabled", "control_type": "toggle", "label": "Indexing is enabled", "helper_text": "Turn off to pause all background indexing.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "action.reindex_now", "control_type": "button", "label": "Reindex now", "helper_text": "Re-run extraction and AI metadata for current scope.", "button_text": "Reindex", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.rebuild_index", "control_type": "button", "label": "Rebuild index (advanced)", "helper_text": "Deletes and rebuilds the index. Use only if support requests it.", "button_text": "Rebuild", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "change_detection": {
-          "name": "Change Detection",
-          "settings": [
-            { "id": "indexing.change_detection_mode", "control_type": "dropdown", "label": "Change detection mode", "helper_text": "Auto chooses the most reliable method for your drives.", "allowed_values": ["Auto", "File system watcher", "Polling"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Auto", "pro": "Auto", "enterprise_private": "Auto", "enterprise_automation": "Auto" } },
-            { "id": "indexing.full_sweep_frequency", "control_type": "dropdown", "label": "Full sweep frequency", "helper_text": "Fallback scan to catch missed events.", "allowed_values": ["Daily", "Weekly", "Monthly", "Never"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Weekly", "pro": "Weekly", "enterprise_private": "Monthly", "enterprise_automation": "Weekly" } },
-            { "id": "indexing.external_drives_behavior", "control_type": "dropdown", "label": "Index external drives when connected", "helper_text": "How removable drives are handled.", "allowed_values": ["Prompt", "Ignore", "Auto-index"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Prompt", "pro": "Prompt", "enterprise_private": "Ignore", "enterprise_automation": "Auto-index" } }
-          ]
-        },
-        "performance": {
-          "name": "Performance",
-          "settings": [
-            { "id": "indexing.cpu_usage_limit", "control_type": "slider", "label": "CPU usage limit", "helper_text": "Caps CPU used by indexing and AI.", "min_value": 10, "max_value": 100, "suffix": "%", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 40, "pro": 60, "enterprise_private": 25, "enterprise_automation": 50 } },
-            { "id": "indexing.disk_io_limit", "control_type": "slider", "label": "Disk IO limit", "helper_text": "Caps disk reads/writes used by indexing.", "min_value": 1, "max_value": 100, "suffix": "%", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 50, "pro": 80, "enterprise_private": 30, "enterprise_automation": 60 } },
-            { "id": "indexing.parallel_extractors", "control_type": "dropdown", "label": "Parallel extractors", "helper_text": "More parallelism is faster but uses more resources.", "allowed_values": ["1", "2", "4", "8", "16"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "2", "pro": "4", "enterprise_private": "1", "enterprise_automation": "3" } },
-            { "id": "indexing.throttle_while_active", "control_type": "toggle", "label": "Throttle while actively using the PC", "helper_text": "Reduces background activity while you work.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "content_limits": {
-          "name": "Content Limits",
-          "settings": [
-            { "id": "indexing.max_text_per_file", "control_type": "dropdown", "label": "Max text per file to analyze", "helper_text": "Limits content processed per file.", "allowed_values": ["15k chars", "50k chars", "100k chars", "250k chars", "Unlimited"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "50k chars", "pro": "100k chars", "enterprise_private": "15k chars", "enterprise_automation": "50k chars" } },
-            { "id": "indexing.max_pdf_pages_ocr", "control_type": "dropdown", "label": "Max PDF pages to OCR", "helper_text": "Prevents long OCR runs.", "allowed_values": ["10", "25", "50", "100", "Unlimited"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "25", "pro": "50", "enterprise_private": "10", "enterprise_automation": "25" } },
-            { "id": "indexing.max_media_minutes_transcribe", "control_type": "dropdown", "label": "Max media minutes to transcribe", "helper_text": "Prevents long transcriptions.", "allowed_values": ["0 (off)", "10", "30", "60", "120"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "10", "pro": "30", "enterprise_private": "0 (off)", "enterprise_automation": "10" } }
-          ]
-        }
-      }
+    {
+      "setting_id": "general.active_preset",
+      "page": "general.modes",
+      "section": "Presets",
+      "label": "Active Preset",
+      "helper_text": "Choose a configuration preset.",
+      "control_type": "dropdown",
+      "value_type": "string",
+      "allowed_values": ["Personal", "Pro", "Enterprise-Private", "Enterprise-Automation"],
+      "defaults": { "personal": "Personal" }
     },
-    "ai_models": {
-      "name": "AI Models",
-      "pages": {
-        "runtime_hardware": {
-          "name": "Runtime & Hardware",
-          "settings": [
-            { "id": "ai.compute_device_preference", "control_type": "dropdown", "label": "Compute device preference", "helper_text": "Auto chooses best device. Choose NPU/iGPU/CPU for troubleshooting.", "allowed_values": ["Auto", "NPU", "iGPU", "CPU"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Auto", "pro": "Auto", "enterprise_private": "Auto", "enterprise_automation": "Auto" } },
-            { "id": "ai.fallback_order", "control_type": "reorder_list", "label": "Fallback order", "helper_text": "If preferred device is unavailable, Vantus falls back in this order.", "allowed_values": ["NPU", "iGPU", "CPU"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": ["NPU", "iGPU", "CPU"], "pro": ["NPU", "iGPU", "CPU"], "enterprise_private": ["CPU", "NPU", "iGPU"], "enterprise_automation": ["NPU", "iGPU", "CPU"] } },
-            { "id": "ai.low_power_inference", "control_type": "toggle", "label": "Low power inference", "helper_text": "Uses smaller/faster models to reduce power usage.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": false } }
-          ]
-        },
-        "model_set": {
-          "name": "Model Set",
-          "settings": [
-            { "id": "ai.embedding_model", "control_type": "dropdown", "label": "Embedding model", "helper_text": "Used for semantic search and similarity.", "allowed_values": ["Balanced (default)", "High quality", "Lightweight"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Balanced (default)", "pro": "High quality", "enterprise_private": "Balanced (approved)", "enterprise_automation": "Balanced (approved)" } },
-            { "id": "ai.classifier_model", "control_type": "dropdown", "label": "Classifier model", "helper_text": "Used for tags/category/partner assignment.", "allowed_values": ["Balanced (default)", "High quality", "Conservative"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "Balanced (default)", "pro": "High quality", "enterprise_private": "Conservative (approved)", "enterprise_automation": "Conservative (approved)" } },
-            { "id": "ai.explanation_model_enabled", "control_type": "dropdown", "label": "Explanation model", "helper_text": "Generates \"Why?\" explanations. Optional.", "allowed_values": ["On", "Off"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "On", "pro": "On", "enterprise_private": "Off", "enterprise_automation": "Off" } }
-          ]
-        },
-        "quality_controls": {
-          "name": "Quality Controls",
-          "settings": [
-            { "id": "ai.auto_tag_threshold", "control_type": "slider", "label": "Auto-tag confidence threshold", "helper_text": "Minimum confidence required to apply tags automatically.", "min_value": 0.5, "max_value": 0.99, "step": 0.01, "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 0.70, "pro": 0.65, "enterprise_private": 0.85, "enterprise_automation": 0.75 } },
-            { "id": "ai.auto_partner_threshold", "control_type": "slider", "label": "Auto-partner confidence threshold", "helper_text": "Minimum confidence required to assign a partner automatically.", "min_value": 0.5, "max_value": 0.99, "step": 0.01, "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 0.75, "pro": 0.70, "enterprise_private": 0.90, "enterprise_automation": 0.80 } },
-            { "id": "ai.auto_organize_threshold", "control_type": "slider", "label": "Auto-organize confidence threshold", "helper_text": "Minimum confidence required to move/rename automatically.", "min_value": 0.5, "max_value": 0.99, "step": 0.01, "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 0.90, "pro": 0.85, "enterprise_private": 0.95, "enterprise_automation": 0.90 } },
-            { "id": "ai.require_approval_below_threshold", "control_type": "toggle", "label": "Require approval below thresholds", "helper_text": "Low-confidence actions go to Review Queue.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "ai.deterministic_results", "control_type": "toggle", "label": "Deterministic results", "helper_text": "More consistent outputs (recommended for enterprise).", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        }
-      }
-    },
-    "extraction": {
-      "name": "Extraction",
-      "pages": {
-        "documents": {
-          "name": "Documents (PDF/Office/Text)",
-          "settings": [
-            { "id": "extract.docs.extract_text", "control_type": "toggle", "label": "Extract text from documents", "helper_text": "Enables content indexing for docs and PDFs.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.docs.store_snippets", "control_type": "toggle", "label": "Store text snippets for search previews", "helper_text": "Shows short excerpts in search results and Explorer panel.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.docs.office_metadata", "control_type": "toggle", "label": "Office metadata (author/title/comments)", "helper_text": "Adds document metadata to the index.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.docs.pdf_processing_mode", "control_type": "dropdown", "label": "PDF processing mode", "helper_text": "Choose how PDFs are read.", "allowed_values": ["Prefer text layer", "Hybrid", "Force OCR"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Prefer text layer", "pro": "Hybrid", "enterprise_private": "Prefer text layer", "enterprise_automation": "Hybrid" } },
-            { "id": "extract.docs.ocr_scanned_pdfs", "control_type": "dropdown", "label": "OCR scanned PDFs", "helper_text": "Runs OCR when text is missing.", "allowed_values": ["Auto", "On-demand", "Off"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Auto", "pro": "Auto", "enterprise_private": "Off", "enterprise_automation": "Auto" } },
-            { "id": "extract.docs.ocr_languages", "control_type": "multi_select", "label": "OCR languages", "helper_text": "Languages used during OCR.", "allowed_values": ["English", "Spanish", "French", "German", "Italian", "Portuguese", "Chinese", "Japanese", "Korean"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": ["English"], "pro": ["English"], "enterprise_private": ["English"], "enterprise_automation": ["English"] } }
-          ]
-        },
-        "images": {
-          "name": "Images",
-          "settings": [
-            { "id": "extract.images.read_exif", "control_type": "toggle", "label": "Read EXIF metadata", "helper_text": "Adds camera/date info for photos.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.images.ocr_mode", "control_type": "dropdown", "label": "OCR images (screenshots/scans)", "helper_text": "Extract text from images.", "allowed_values": ["On-demand", "Auto", "Off"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "On-demand", "pro": "Auto", "enterprise_private": "Off", "enterprise_automation": "On-demand" } },
-            { "id": "extract.images.visual_tagging", "control_type": "dropdown", "label": "Visual tagging (objects/scenes)", "helper_text": "Generates visual tags. Can be resource-intensive.", "allowed_values": ["Off", "On-demand", "Auto"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Off", "pro": "On-demand", "enterprise_private": "Off", "enterprise_automation": "Off" } }
-          ]
-        },
-        "code": {
-          "name": "Code",
-          "settings": [
-            { "id": "extract.code.code_aware_indexing", "control_type": "toggle", "label": "Enable code-aware indexing", "helper_text": "Improves results for source code and repos.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.code.respect_gitignore", "control_type": "toggle", "label": "Respect .gitignore", "helper_text": "Skips files marked ignored by the repo.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.code.index_dependencies", "control_type": "toggle", "label": "Index dependency folders (node_modules/vendor)", "helper_text": "Not recommended; increases index size.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.code.extract_symbols", "control_type": "toggle", "label": "Extract symbols (classes/functions)", "helper_text": "Adds structure for better code search.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "archives": {
-          "name": "Archives",
-          "settings": [
-            { "id": "extract.archives.index_manifest", "control_type": "toggle", "label": "Index archive contents list (manifest)", "helper_text": "Indexes file names inside ZIP/RAR/7z.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "extract.archives.unpack_small_archives", "control_type": "toggle", "label": "Unpack small archives for full indexing", "helper_text": "Extracts small archives to index contents.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.archives.small_archive_size_limit", "control_type": "dropdown", "label": "Small archive size limit", "helper_text": "Maximum archive size to unpack.", "allowed_values": ["100 MB", "250 MB", "500 MB"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "250 MB", "pro": "250 MB", "enterprise_private": "100 MB", "enterprise_automation": "250 MB" } },
-            { "id": "extract.archives.password_archives_behavior", "control_type": "dropdown", "label": "Password-protected archives", "helper_text": "How encrypted archives are handled.", "allowed_values": ["Skip", "Prompt"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Skip", "pro": "Prompt", "enterprise_private": "Skip", "enterprise_automation": "Skip" } }
-          ]
-        },
-        "media": {
-          "name": "Media (Audio/Video)",
-          "settings": [
-            { "id": "extract.media.transcription_mode", "control_type": "dropdown", "label": "Transcription", "helper_text": "Generates searchable transcripts.", "allowed_values": ["On-demand", "Idle-only", "Off"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "On-demand", "pro": "Idle-only", "enterprise_private": "Off", "enterprise_automation": "Idle-only" } },
-            { "id": "extract.media.store_transcript_text", "control_type": "toggle", "label": "Store transcript text", "helper_text": "Allows snippet previews from transcripts.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.media.speaker_separation", "control_type": "toggle", "label": "Speaker separation", "helper_text": "Attempts to identify different speakers.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.media.max_minutes_transcribe", "control_type": "dropdown", "label": "Max media minutes to transcribe", "helper_text": "Prevents long jobs.", "allowed_values": ["10", "30", "60", "Unlimited"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "10", "pro": "30", "enterprise_private": "Unlimited", "enterprise_automation": "30" } }
-          ]
-        },
-        "email_exports": {
-          "name": "Email & Exports",
-          "settings": [
-            { "id": "extract.email.enable_parsing", "control_type": "toggle", "label": "Enable email export parsing (PST/mbox)", "helper_text": "Indexes supported email exports and attachments.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "extract.email.index_bodies", "control_type": "dropdown", "label": "Index email bodies", "helper_text": "Choose how much email content is stored.", "allowed_values": ["Headers only", "Full"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Full", "pro": "Full", "enterprise_private": "Headers only", "enterprise_automation": "Headers only" } },
-            { "id": "extract.email.index_attachments", "control_type": "toggle", "label": "Index attachments", "helper_text": "Attachments are indexed like normal files.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        }
-      }
-    },
-    "organize_automations": {
-      "name": "Organize & Automations",
-      "pages": {
-        "organizing_mode": {
-          "name": "Organizing Mode",
-          "settings": [
-            { "id": "organize.mode", "control_type": "dropdown", "label": "Organizing mode", "helper_text": "Controls whether Vantus moves/renames files.", "allowed_values": ["Suggestions only", "Approval required", "Index only", "Trusted rules only"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Suggestions only", "pro": "Approval required", "enterprise_private": "Index only", "enterprise_automation": "Trusted rules only" } },
-            { "id": "organize.show_suggestions_in_explorer", "control_type": "toggle", "label": "Show organizing suggestions in Explorer panel", "helper_text": "Suggestions appear when you select a file.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.allow_one_click_apply", "control_type": "toggle", "label": "Allow one-click apply", "helper_text": "Apply suggestion without opening the app.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": true } }
-          ]
-        },
-        "rules": {
-          "name": "Rules",
-          "settings": [
-            { "id": "organize.rules_engine_enabled", "control_type": "toggle", "label": "Enable rules engine", "helper_text": "Rules drive consistent tagging and organizing.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.suggest_rules_from_approvals", "control_type": "toggle", "label": "Suggest new rules from your approvals", "helper_text": "Learns patterns and proposes new rules.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": true } },
-            { "id": "organize.require_approval_for_new_rules", "control_type": "toggle", "label": "Require approval for new rules", "helper_text": "Prevents silent automation changes.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.rule_priority_mode", "control_type": "dropdown", "label": "Rule priority mode", "helper_text": "How conflicts between rules are resolved.", "allowed_values": ["Highest priority wins", "Strict + review", "Strict + audit"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Highest priority wins", "pro": "Highest priority wins", "enterprise_private": "Strict + review", "enterprise_automation": "Strict + audit" } }
-          ]
-        },
-        "safety_undo": {
-          "name": "Safety & Undo",
-          "settings": [
-            { "id": "organize.never_move_open_files", "control_type": "toggle", "label": "Never move open files", "helper_text": "Avoids file lock issues and data loss.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.copy_verify_delete", "control_type": "toggle", "label": "Copy → verify → delete", "helper_text": "Safer but slower moves.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.cloud_sync_behavior", "control_type": "dropdown", "label": "Avoid cloud-sync conflicts", "helper_text": "OneDrive/Dropbox safety behavior.", "allowed_values": ["Prompt", "Avoid", "Allow"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Prompt", "pro": "Prompt", "enterprise_private": "Avoid", "enterprise_automation": "Avoid" } },
-            { "id": "organize.collision_handling", "control_type": "dropdown", "label": "Collision handling", "helper_text": "How renames are handled when a name exists.", "allowed_values": ["Add suffix", "Add timestamp", "Skip"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Add suffix", "pro": "Add suffix", "enterprise_private": "Add suffix", "enterprise_automation": "Add suffix" } },
-            { "id": "organize.undo_retention_window", "control_type": "dropdown", "label": "Undo retention window", "helper_text": "How long changes can be undone.", "allowed_values": ["7 days", "30 days", "90 days", "365 days"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "30 days", "pro": "90 days", "enterprise_private": "90 days", "enterprise_automation": "365 days" } }
-          ]
-        },
-        "review_queue": {
-          "name": "Review Queue",
-          "settings": [
-            { "id": "organize.review_queue_enabled", "control_type": "toggle", "label": "Enable Review Queue", "helper_text": "Collects low-confidence or approval-required actions.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "organize.review_notify_threshold", "control_type": "dropdown", "label": "Notify when queue exceeds", "helper_text": "Helps you keep up with pending items.", "allowed_values": ["10", "25", "50", "100"], "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": "25", "pro": "50", "enterprise_private": "20", "enterprise_automation": "100" } },
-            { "id": "organize.batch_approvals_enabled", "control_type": "toggle", "label": "Batch approvals", "helper_text": "Approve multiple actions at once.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        }
-      }
-    },
-    "tags_taxonomy": {
-      "name": "Tags & Taxonomy",
-      "pages": {
-        "tagging_behavior": {
-          "name": "Tagging Behavior",
-          "settings": [
-            { "id": "tags.auto_tag_files", "control_type": "toggle", "label": "Auto-tag files", "helper_text": "Adds tags during indexing.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": true } },
-            { "id": "tags.suggest_tags_while_browsing", "control_type": "toggle", "label": "Suggest tags while you browse", "helper_text": "Shows recommended tags in the Explorer panel.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "tags.max_tags_per_file", "control_type": "dropdown", "label": "Maximum tags per file", "helper_text": "Limits tag spam.", "allowed_values": ["5", "10", "20", "Unlimited"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "10", "pro": "20", "enterprise_private": "5", "enterprise_automation": "10" } }
-          ]
-        },
-        "vocabulary_synonyms": {
-          "name": "Vocabulary & Synonyms",
-          "settings": [
-            { "id": "tags.vocabulary_mode", "control_type": "dropdown", "label": "Tag vocabulary mode", "helper_text": "Choose freeform or a controlled list.", "allowed_values": ["Freeform", "Controlled"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Freeform", "pro": "Freeform", "enterprise_private": "Controlled", "enterprise_automation": "Controlled" } },
-            { "id": "tags.synonyms_editor_enabled", "control_type": "toggle", "label": "Synonyms editor", "helper_text": "Map tag synonyms (e.g., \"invoice\" ↔ \"bill\").", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "windows_metadata_fields": {
-          "name": "Windows Metadata Fields",
-          "settings": [
-            { "id": "windows.props.expose_ai_tags", "control_type": "toggle", "label": "Expose \"AI Tags\" to Windows Explorer", "helper_text": "Shows tags in Details pane and as a column.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "windows.props.expose_ai_partner", "control_type": "toggle", "label": "Expose \"AI Partner\" to Windows Explorer", "helper_text": "Shows partner in Details pane and as a column.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "windows.props.expose_ai_explanation", "control_type": "toggle", "label": "Expose \"AI Explanation\" to Windows Explorer", "helper_text": "Shows a short \"Why?\" summary.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "windows.props.tag_formatting", "control_type": "dropdown", "label": "Tag formatting", "helper_text": "How tags are shown in Explorer columns.", "allowed_values": ["Semicolon-separated", "Comma-separated", "Newline-separated"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Semicolon-separated", "pro": "Semicolon-separated", "enterprise_private": "Semicolon-separated", "enterprise_automation": "Semicolon-separated" } }
-          ]
-        }
-      }
-    },
-    "partners": {
-      "name": "Partners",
-      "pages": {
-        "partner_directory": {
-          "name": "Partner Directory",
-          "settings": [
-            { "id": "partners.enable_directory", "control_type": "toggle", "label": "Enable partner directory", "helper_text": "Track clients/vendors/projects for better organization.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "partners.types_enabled", "control_type": "multi_select", "label": "Partner types enabled", "helper_text": "Choose which partner categories you use.", "allowed_values": ["Client", "Vendor", "Project"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": ["Client", "Vendor"], "pro": ["Client", "Vendor", "Project"], "enterprise_private": ["Client", "Vendor", "Project"], "enterprise_automation": ["Client", "Vendor", "Project"] } },
-            { "id": "partners.default_destination_per_partner", "control_type": "toggle", "label": "Default destination per partner", "helper_text": "Partners can map to default folders.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": true } }
-          ]
-        },
-        "matching_logic": {
-          "name": "Matching Logic",
-          "settings": [
-            { "id": "partners.match_by_domain", "control_type": "toggle", "label": "Match by email domain", "helper_text": "High-confidence matching when domains are present.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "partners.match_by_filename", "control_type": "toggle", "label": "Match by filename patterns", "helper_text": "Uses file naming conventions.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "partners.match_by_content", "control_type": "toggle", "label": "Match by document content", "helper_text": "Uses extracted text to infer partner.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "partners.require_approval_for_assignment", "control_type": "toggle", "label": "Require approval for partner assignment", "helper_text": "Sends ambiguous matches to Review Queue.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": false } },
-            { "id": "partners.partner_confidence_threshold", "control_type": "slider", "label": "Partner confidence threshold", "helper_text": "Minimum confidence for auto-assignment.", "min_value": 0.5, "max_value": 0.99, "step": 0.01, "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": 0.75, "pro": 0.70, "enterprise_private": 0.90, "enterprise_automation": 0.80 } }
-          ]
-        },
-        "partner_policies": {
-          "name": "Partner Policies",
-          "settings": [
-            { "id": "partners.per_partner_exclusions", "control_type": "editor", "label": "Per-partner exclusions", "helper_text": "Exclude certain folders or file types for a partner.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.partners.pin_to_folder", "control_type": "button", "label": "Pin partner to folder", "helper_text": "Treat everything in this folder as this partner.", "button_text": "Pin", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "search": {
-      "name": "Search",
-      "pages": {
-        "search_mode": {
-          "name": "Search Mode",
-          "settings": [
-            { "id": "search.default_mode", "control_type": "dropdown", "label": "Default search mode", "helper_text": "Choose keyword, semantic, or hybrid search.", "allowed_values": ["Keyword", "Semantic", "Hybrid"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Hybrid", "pro": "Hybrid", "enterprise_private": "Keyword/Hybrid", "enterprise_automation": "Hybrid" } },
-            { "id": "search.enable_find_similar", "control_type": "toggle", "label": "Enable \"Find similar\"", "helper_text": "Uses embeddings to find related files.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "results_previews": {
-          "name": "Results & Previews",
-          "settings": [
-            { "id": "search.show_content_snippets", "control_type": "toggle", "label": "Show content snippets in search results", "helper_text": "Displays excerpts from documents and transcripts.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "search.show_thumbnails", "control_type": "toggle", "label": "Show thumbnails/previews", "helper_text": "Shows file previews in results.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "search.require_hello_for_previews", "control_type": "toggle", "label": "Require Windows Hello for previews", "helper_text": "Adds privacy on shared machines.", "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "ranking_facets": {
-          "name": "Ranking & Facets",
-          "settings": [
-            { "id": "search.recency_boost", "control_type": "slider", "label": "Recency boost", "helper_text": "Prefer newer files in results.", "min_value": 0, "max_value": 100, "suffix": "%", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": 50, "pro": 75, "enterprise_private": 25, "enterprise_automation": 50 } },
-            { "id": "search.filename_exact_match_boost", "control_type": "slider", "label": "Filename exact-match boost", "helper_text": "Boost exact filename hits.", "min_value": 0, "max_value": 100, "suffix": "%", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": 100, "pro": 100, "enterprise_private": 100, "enterprise_automation": 100 } },
-            { "id": "search.enabled_facets", "control_type": "multi_select", "label": "Enabled facets", "helper_text": "Filters available in search.", "allowed_values": ["Type", "Date", "Tags", "Partner", "Location", "Size"], "scope": "workspace", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": ["Type", "Date", "Tags", "Partner"], "pro": ["Type", "Date", "Tags", "Partner", "Location", "Size"], "enterprise_private": ["Type", "Date", "Partner"], "enterprise_automation": ["Type", "Date", "Tags", "Partner"] } }
-          ]
-        }
-      }
-    },
-    "windows_integration": {
-      "name": "Windows Integration",
-      "pages": {
-        "explorer_surfaces": {
-          "name": "Explorer Surfaces",
-          "settings": [
-            { "id": "windows.explorer.enable_columns", "control_type": "toggle", "label": "Enable Explorer columns", "helper_text": "Adds columns like AI Tags and AI Partner.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "windows.explorer.enable_details_pane", "control_type": "toggle", "label": "Enable Details pane properties", "helper_text": "Shows AI metadata when a file is selected.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "windows.explorer.enable_preview_panel", "control_type": "toggle", "label": "Enable Vantus AI Panel (Preview pane)", "helper_text": "Shows a rich panel in the Explorer Preview pane.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "context_menu_actions": {
-          "name": "Context Menu Actions",
-          "settings": [
-            { "id": "windows.context_menu.actions", "control_type": "multi_select", "label": "Context menu actions", "helper_text": "Choose actions shown in Explorer.", "allowed_values": ["Tag", "Explain", "Reindex", "Assign Partner", "Propose Move"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": ["Tag", "Explain", "Reindex"], "pro": ["Tag", "Explain", "Reindex", "Assign Partner", "Propose Move"], "enterprise_private": ["Tag", "Explain"], "enterprise_automation": ["Tag", "Explain"] } },
-            { "id": "windows.context_menu.modern_menu", "control_type": "toggle", "label": "Show actions in modern menu", "helper_text": "Attempt to show in the Windows 11 primary menu.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "windows_search_integration": {
-          "name": "Windows Search Integration",
-          "settings": [
-            { "id": "windows.search.register_ai_properties", "control_type": "toggle", "label": "Register AI properties with Windows Search", "helper_text": "Lets Windows Search filter on AI Tags/Partner.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "windows.search.allow_index_extracted_text", "control_type": "toggle", "label": "Allow Windows Search to index extracted text", "helper_text": "Not recommended for strict privacy environments.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "action.windows.search.rebuild_property_cache", "control_type": "button", "label": "Rebuild Windows property cache", "helper_text": "Use if Explorer columns look out of date.", "button_text": "Rebuild", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "privacy_security": {
-      "name": "Privacy & Security",
-      "pages": {
-        "local_storage_encryption": {
-          "name": "Local Storage & Encryption",
-          "settings": [
-            { "id": "privacy.encrypt_index_db", "control_type": "toggle", "label": "Encrypt index database", "helper_text": "Protects metadata at rest.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "privacy.encrypt_text_cache", "control_type": "toggle", "label": "Encrypt extracted text cache", "helper_text": "Protects stored text and previews at rest.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "privacy.embeddings_only_mode", "control_type": "toggle", "label": "Embeddings-only mode", "helper_text": "Stores embeddings without raw extracted text.", "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": false } },
-            { "id": "privacy.store_previews_thumbnails", "control_type": "toggle", "label": "Store previews/thumbnails", "helper_text": "Improves UX but may store visual content locally.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } }
-          ]
-        },
-        "access_controls": {
-          "name": "Access Controls",
-          "settings": [
-            { "id": "privacy.require_signin_to_open", "control_type": "toggle", "label": "Require sign-in to open Vantus", "helper_text": "Prevents casual access on shared machines.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "privacy.require_hello_to_edit_rules", "control_type": "toggle", "label": "Require Windows Hello to edit rules", "helper_text": "Adds protection against accidental automation changes.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "privacy.require_hello_to_view_previews", "control_type": "toggle", "label": "Require Windows Hello to view previews", "helper_text": "Prevents shoulder-surfing.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "sensitive_data_protections": {
-          "name": "Sensitive Data Protections",
-          "settings": [
-            { "id": "privacy.redact_sensitive_in_logs", "control_type": "toggle", "label": "Redact sensitive strings in logs", "helper_text": "Redacts patterns like SSNs and credit cards in diagnostics.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "privacy.disable_indexing_in_sensitive_locations", "control_type": "toggle", "label": "Disable indexing in sensitive locations", "helper_text": "Blocks indexing where policies prohibit content processing.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": false } }
-          ]
-        },
-        "keys_rotation": {
-          "name": "Keys & Rotation",
-          "settings": [
-            { "id": "privacy.key_storage", "control_type": "dropdown", "label": "Key storage", "helper_text": "How encryption keys are protected.", "allowed_values": ["Windows (DPAPI)", "Enterprise key"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Windows (DPAPI)", "pro": "Windows (DPAPI)", "enterprise_private": "Windows (DPAPI)", "enterprise_automation": "Enterprise key" } },
-            { "id": "action.privacy.rotate_keys", "control_type": "button", "label": "Rotate encryption keys", "helper_text": "Rotates keys and re-encrypts stored data.", "button_text": "Rotate", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "compliance_audit": {
-      "name": "Compliance & Audit",
-      "pages": {
-        "audit_log": {
-          "name": "Audit Log",
-          "settings": [
-            { "id": "audit.enabled", "control_type": "toggle", "label": "Enable audit logging", "helper_text": "Records actions like moves, renames, partner edits.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "audit.detail_level", "control_type": "dropdown", "label": "Audit detail level", "helper_text": "Higher detail increases log size.", "allowed_values": ["Standard", "Detailed"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "Standard", "pro": "Detailed", "enterprise_private": "Standard", "enterprise_automation": "Detailed" } },
-            { "id": "action.audit.export_log", "control_type": "button", "label": "Export audit log", "helper_text": "Exports to CSV/JSON.", "button_text": "Export", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "retention_legal_hold": {
-          "name": "Retention & Legal Hold",
-          "settings": [
-            { "id": "compliance.legal_hold_mode", "control_type": "toggle", "label": "Legal hold mode", "helper_text": "Prevents automated moves/renames for held content.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "audit.retention", "control_type": "dropdown", "label": "Audit log retention", "helper_text": "How long audit logs are kept.", "allowed_values": ["90 days", "180 days", "365 days", "Custom"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "90 days", "pro": "180 days", "enterprise_private": "365 days", "enterprise_automation": "365 days" } }
-          ]
-        },
-        "policy_reports": {
-          "name": "Policy Reports",
-          "settings": [
-            { "id": "action.reports.index_scope", "control_type": "button", "label": "Generate index scope report", "helper_text": "Shows which locations and file types are indexed.", "button_text": "Generate", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.reports.security_posture", "control_type": "button", "label": "Generate security posture report", "helper_text": "Summarizes encryption, previews, and retention settings.", "button_text": "Generate", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "notifications": {
-      "name": "Notifications",
-      "pages": {
-        "alerts_banners": {
-          "name": "Alerts & Banners",
-          "settings": [
-            { "id": "notify.indexing_completed", "control_type": "toggle", "label": "Indexing completed", "helper_text": "Notify when background indexing finishes.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": false, "pro": false, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "notify.suggestions_ready", "control_type": "toggle", "label": "Suggestions ready", "helper_text": "Notify when suggestions are ready to review.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "notify.errors_attention", "control_type": "toggle", "label": "Errors requiring attention", "helper_text": "Notify when a fix is needed.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "quiet_hours": {
-          "name": "Quiet Hours",
-          "settings": [
-            { "id": "notify.quiet_hours_enabled", "control_type": "toggle", "label": "Enable quiet hours", "helper_text": "Suppress notifications during set hours.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "notify.quiet_hours_schedule", "control_type": "time_range", "label": "Quiet hours schedule", "helper_text": "Notifications will be delivered after quiet hours.", "scope": "workspace", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": "10 PM–8 AM", "pro": "10 PM–8 AM", "enterprise_private": "9 PM–9 AM", "enterprise_automation": "10 PM–8 AM" } }
-          ]
-        }
-      }
-    },
-    "storage_maintenance": {
-      "name": "Storage & Maintenance",
-      "pages": {
-        "storage_locations": {
-          "name": "Storage Locations",
-          "settings": [
-            { "id": "storage.index_location", "control_type": "dropdown", "label": "Index storage location", "helper_text": "Choose where Vantus stores its database.", "allowed_values": ["System drive", "Secondary drive"], "scope": "global", "requires_restart": true, "policy_lockable": true, "defaults": { "personal": "System drive", "pro": "System drive", "enterprise_private": "System drive", "enterprise_automation": "System drive" } },
-            { "id": "action.storage.move_index", "control_type": "button", "label": "Move index to another drive", "helper_text": "Moves index and caches safely.", "button_text": "Move", "scope": "global", "requires_restart": true, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "cache_controls": {
-          "name": "Cache Controls",
-          "settings": [
-            { "id": "storage.text_cache_size_limit", "control_type": "dropdown", "label": "Text cache size limit", "helper_text": "Caps storage for extracted text.", "allowed_values": ["1 GB", "5 GB", "10 GB", "Unlimited"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "5 GB", "pro": "10 GB", "enterprise_private": "1 GB", "enterprise_automation": "5 GB" } },
-            { "id": "storage.preview_cache_size_limit", "control_type": "dropdown", "label": "Preview/thumbnail cache size limit", "helper_text": "Caps storage for thumbnails.", "allowed_values": ["1 GB", "2 GB", "5 GB", "Unlimited"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": "2 GB", "pro": "5 GB", "enterprise_private": "0 GB", "enterprise_automation": "2 GB" } }
-          ]
-        },
-        "maintenance_repair": {
-          "name": "Maintenance & Repair",
-          "settings": [
-            { "id": "storage.optimize_db_weekly", "control_type": "toggle", "label": "Optimize database weekly", "helper_text": "Improves performance over time.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "storage.integrity_check_monthly", "control_type": "toggle", "label": "Integrity check monthly", "helper_text": "Detects corruption early.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "action.storage.clear_caches", "control_type": "button", "label": "Clear caches", "helper_text": "Clears previews and temporary extraction data.", "button_text": "Clear", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "backup_restore": {
-          "name": "Backup & Restore",
-          "settings": [
-            { "id": "action.storage.backup_index", "control_type": "button", "label": "Backup index", "helper_text": "Saves index state for recovery.", "button_text": "Backup", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.storage.restore_index", "control_type": "button", "label": "Restore index", "helper_text": "Restores from a backup file.", "button_text": "Restore", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "diagnostics": {
-      "name": "Diagnostics",
-      "pages": {
-        "system_status": {
-          "name": "System Status",
-          "settings": [
-            { "id": "diag.show_device_usage", "control_type": "status", "label": "Show runtime device usage", "helper_text": "Shows whether NPU/iGPU/CPU is being used.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "diag.show_model_versions", "control_type": "status", "label": "Show current model versions", "helper_text": "Model IDs and update channel.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } },
-            { "id": "action.diag.test_extraction", "control_type": "button", "label": "Test extraction on a file…", "helper_text": "Runs the pipeline and shows each stage output.", "button_text": "Test", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "performance_trace": {
-          "name": "Performance Trace",
-          "settings": [
-            { "id": "action.diag.start_trace", "control_type": "button", "label": "Start performance trace", "helper_text": "Captures performance metrics for support.", "button_text": "Start", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "diag.include_paths_in_trace", "control_type": "toggle", "label": "Include file paths in trace", "helper_text": "May reveal sensitive paths. Use only if approved.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": false, "enterprise_automation": false } }
-          ]
-        },
-        "export_diagnostics_bundle": {
-          "name": "Export Diagnostics Bundle",
-          "settings": [
-            { "id": "action.diag.export_bundle", "control_type": "button", "label": "Export diagnostics bundle", "helper_text": "Exports logs and settings (redacted) for support.", "button_text": "Export", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "diag.redact_content_snippets", "control_type": "toggle", "label": "Redact content snippets", "helper_text": "Removes any content previews from logs.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": true, "pro": true, "enterprise_private": true, "enterprise_automation": true } }
-          ]
-        },
-        "advanced_power_user": {
-          "name": "Advanced (Power User)",
-          "settings": [
-            { "id": "diag.show_raw_ai_json", "control_type": "toggle", "label": "Show raw AI metadata (JSON)", "helper_text": "For debugging and power users.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": true, "enterprise_private": false, "enterprise_automation": false } },
-            { "id": "diag.experimental_features", "control_type": "toggle", "label": "Enable experimental features", "helper_text": "May be unstable.", "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "personal": false, "pro": false, "enterprise_private": false, "enterprise_automation": false } }
-          ]
-        }
-      }
-    },
-    "admin_managed": {
-      "name": "Admin (Managed)",
-      "visibility": "managed_only",
-      "pages": {
-        "policy_overview": {
-          "name": "Policy Overview",
-          "settings": [
-            { "id": "admin.managed_status", "control_type": "status", "label": "This device is managed", "helper_text": "Settings may be enforced by your organization.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "action.admin.view_enforced_policies", "control_type": "button", "label": "View enforced policies", "helper_text": "Shows which settings are locked and why.", "button_text": "View", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "enforced_restrictions": {
-          "name": "Enforced Restrictions",
-          "settings": []
-        },
-        "deployment_updates": {
-          "name": "Deployment & Updates",
-          "settings": [
-            { "id": "admin.update_channel", "control_type": "dropdown", "label": "Update channel", "helper_text": "Stable or enterprise-approved preview.", "allowed_values": ["Stable", "Preview"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "enterprise_private": "Stable", "enterprise_automation": "Stable" } },
-            { "id": "admin.update_deferral_window", "control_type": "dropdown", "label": "Update deferral window", "helper_text": "Delay updates for validation.", "allowed_values": ["0 days", "14 days", "30 days", "60 days", "90 days"], "scope": "global", "requires_restart": false, "policy_lockable": true, "defaults": { "enterprise_private": "30 days", "enterprise_automation": "30 days" } },
-            { "id": "action.admin.export_policy_file", "control_type": "button", "label": "Export policy file", "helper_text": "Generate a policy file for deployment tools.", "button_text": "Export", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
-    },
-    "about": {
-      "name": "About",
-      "pages": {
-        "version_licenses": {
-          "name": "Version & Licenses",
-          "settings": [
-            { "id": "about.version", "control_type": "read_only", "label": "Version", "helper_text": "Current installed version.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "about.build_number", "control_type": "read_only", "label": "Build number", "helper_text": "Internal build identifier.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "about.oss_licenses", "control_type": "link", "label": "Open-source licenses", "helper_text": "Third-party licenses used by Vantus.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} },
-            { "id": "about.privacy_statement", "control_type": "link", "label": "Privacy statement", "helper_text": "How Vantus handles your data.", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        },
-        "reset": {
-          "name": "Reset",
-          "settings": [
-            { "id": "action.about.reset_to_defaults", "control_type": "button", "label": "Reset Vantus to defaults", "helper_text": "Clears settings and rebuilds index (requires confirmation).", "button_text": "Reset", "scope": "global", "requires_restart": false, "policy_lockable": false, "defaults": {} }
-          ]
-        }
-      }
+     {
+      "setting_id": "indexing.cpu_limit",
+      "page": "indexing.performance",
+      "section": "Resources",
+      "label": "CPU Usage Limit (%)",
+      "helper_text": "Limit the CPU usage of the indexing engine.",
+      "control_type": "slider",
+      "value_type": "int",
+      "allowed_values": { "min": 10, "max": 100, "step": 10 },
+      "defaults": { "personal": 50, "pro": 80, "enterprise_private": 40 }
     }
-  }
+  ]
 }
