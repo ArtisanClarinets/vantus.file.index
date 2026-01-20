@@ -4,10 +4,25 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:Vantus.App.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="DashboardPage">
-    <Grid>
-        <TextBlock Text="Dashboard" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      Title="Dashboard">
+
+    <Grid Margin="24">
+        <StackPanel>
+            <TextBlock Text="Dashboard" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+            <ui:CardControl Icon="{ui:SymbolIcon Status24}" Header="Indexing Status">
+                <StackPanel>
+                     <TextBlock Text="{Binding ViewModel.IndexStatus}" FontSize="20" FontWeight="Medium" Margin="0,0,0,10"/>
+                     <StackPanel Orientation="Horizontal">
+                         <ui:Button Content="Refresh" Command="{Binding ViewModel.RefreshStatusCommand}" Margin="0,0,8,0" />
+                         <ui:Button Content="Pause" Command="{Binding ViewModel.PauseIndexingCommand}" Margin="0,0,8,0" />
+                         <ui:Button Content="Resume" Command="{Binding ViewModel.ResumeIndexingCommand}" />
+                     </StackPanel>
+                </StackPanel>
+            </ui:CardControl>
+        </StackPanel>
     </Grid>
 </Page>

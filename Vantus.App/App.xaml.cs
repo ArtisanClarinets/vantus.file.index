@@ -61,22 +61,15 @@ public partial class App : Application
     }
 
     private async void OnStartup(object sender, StartupEventArgs e)
-    private System.Diagnostics.Process? _engineProcess;
-
-    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         await Host.StartAsync();
-
-        var lifecycleManager = GetService<EngineLifecycleManager>();
-        await lifecycleManager.StartEngineAsync();
 
         var errorHandler = GetService<ErrorHandlingService>();
         errorHandler.Initialize();
 
-        m_window.Closed += (s, e) =>
-        {
-            StopEngine();
-        };
+        // Start Engine
+        var lifecycleManager = GetService<EngineLifecycleManager>();
+        await lifecycleManager.StartEngineAsync();
 
         try
         {
@@ -105,49 +98,20 @@ public partial class App : Application
         var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Resources", "app.ico");
         if (File.Exists(iconPath))
         {
-<<<<<<< HEAD
             try {
                 mainWindow.Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri(iconPath));
             } catch { /* Ignore icon error */ }
-=======
-            try
-            {
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                _engineProcess = System.Diagnostics.Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to start engine: {ex}");
-            }
- 
         }
         
         mainWindow.Show();
     }
 
-
     protected override async void OnExit(ExitEventArgs e)
     {
+        var lifecycleManager = GetService<EngineLifecycleManager>();
+        lifecycleManager.StopEngine();
+
         await Host.StopAsync();
         base.OnExit(e);
     }
-    private void StopEngine()
-    {
-        try
-        {
-            if (_engineProcess != null && !_engineProcess.HasExited)
-            {
-                _engineProcess.Kill();
-                _engineProcess.Dispose();
-            }
-        }
-        catch { }
-    }
-
-+    private Window m_window;
 }

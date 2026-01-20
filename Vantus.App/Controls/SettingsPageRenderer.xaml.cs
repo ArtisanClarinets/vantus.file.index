@@ -4,6 +4,7 @@ using Wpf.Ui.Controls;
 using Vantus.App.ViewModels;
 using System.Text.Json;
 using System.Windows.Data;
+using System.ComponentModel;
 
 namespace Vantus.App.Controls;
 
@@ -70,10 +71,6 @@ public partial class SettingsPageRenderer : UserControl
         // Helper text
         if (!string.IsNullOrEmpty(vm.Definition.HelperText))
         {
-             // CardControl usually displays description if available? 
-             // In Wpf.Ui 3.x, CardControl has Content, Header, Icon. 
-             // Maybe we use ToolTip or put description in Content if logical.
-             // But usually we want the control in Content.
              ToolTipService.SetToolTip(card, vm.Definition.HelperText);
         }
 
@@ -90,10 +87,20 @@ public partial class SettingsPageRenderer : UserControl
             {
                 case "toggle":
                     var ts = new ToggleSwitch();
-                    try { ts.IsChecked = Convert.ToBoolean(vm.Value); } catch {}
+                    void UpdateToggle() {
+                        try {
+                            var val = Convert.ToBoolean(vm.Value);
+                            if (ts.IsChecked != val) ts.IsChecked = val;
+                        } catch {}
+                    }
+                    UpdateToggle();
+
                     ts.Click += (s, e) => vm.Value = ts.IsChecked;
+                    vm.PropertyChanged += (s, e) => { if(e.PropertyName == nameof(vm.Value)) ts.Dispatcher.Invoke(UpdateToggle); };
+
                     content = ts;
                     break;
+
                 case "slider":
                     var sl = new Slider();
                     sl.Width = 200;
@@ -104,10 +111,21 @@ public partial class SettingsPageRenderer : UserControl
                         if(je.TryGetProperty("max", out var max)) sl.Maximum = max.GetDouble();
                         if(je.TryGetProperty("step", out var step)) sl.TickFrequency = step.GetDouble();
                     }
-                    try { sl.Value = Convert.ToDouble(vm.Value); } catch {}
+
+                    void UpdateSlider() {
+                        try {
+                            var val = Convert.ToDouble(vm.Value);
+                            if (Math.Abs(sl.Value - val) > 0.001) sl.Value = val;
+                        } catch {}
+                    }
+                    UpdateSlider();
+
                     sl.ValueChanged += (s, e) => vm.Value = sl.Value;
+                    vm.PropertyChanged += (s, e) => { if(e.PropertyName == nameof(vm.Value)) sl.Dispatcher.Invoke(UpdateSlider); };
+
                     content = sl;
                     break;
+
                 case "dropdown":
                     var cb = new System.Windows.Controls.ComboBox();
                     cb.Width = 200;
@@ -122,19 +140,35 @@ public partial class SettingsPageRenderer : UserControl
                         cb.ItemsSource = arr;
                     }
 
-                    try { cb.SelectedItem = vm.Value?.ToString(); } catch {}
+                    void UpdateCombo() {
+                        try {
+                            var val = vm.Value?.ToString();
+                            if (cb.SelectedItem?.ToString() != val) cb.SelectedItem = val;
+                        } catch {}
+                    }
+                    UpdateCombo();
+
                     cb.SelectionChanged += (s, e) => vm.Value = cb.SelectedItem;
+                    vm.PropertyChanged += (s, e) => { if(e.PropertyName == nameof(vm.Value)) cb.Dispatcher.Invoke(UpdateCombo); };
+
                     content = cb;
                     break;
+
                 case "button":
                     var btn = new Wpf.Ui.Controls.Button();
                     btn.Content = "Action";
                     content = btn;
                     break;
+
                 case "status":
                     var tb = new System.Windows.Controls.TextBlock();
-                    tb.Text = vm.Value?.ToString() ?? "";
+                    void UpdateStatus() {
+                        tb.Text = vm.Value?.ToString() ?? "";
+                    }
+                    UpdateStatus();
                     tb.VerticalAlignment = VerticalAlignment.Center;
+                    vm.PropertyChanged += (s, e) => { if(e.PropertyName == nameof(vm.Value)) tb.Dispatcher.Invoke(UpdateStatus); };
+
                     content = tb;
                     break;
             }
