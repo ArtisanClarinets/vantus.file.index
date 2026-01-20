@@ -11,6 +11,7 @@ service Engine {
   rpc SetComputePreference (ComputePreferenceRequest) returns (Empty);
   rpc ReindexLocation (ReindexLocationRequest) returns (Empty);
   rpc RebuildIndex (Empty) returns (Empty);
+  rpc Shutdown (Empty) returns (Empty);
   rpc TestExtraction (TestExtractionRequest) returns (TestExtractionResult);
   rpc Search (SearchRequest) returns (SearchResponse);
 }

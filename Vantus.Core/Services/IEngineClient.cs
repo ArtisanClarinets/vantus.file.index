@@ -8,6 +8,7 @@ public interface IEngineClient
     Task SetComputePreferenceAsync(ComputeDevice device);
     Task ReindexLocationAsync(string path);
     Task RebuildIndexAsync();
+    Task ShutdownAsync();
     Task<TestExtractionResult> TestExtractionAsync(string filePath);
     Task<SearchResponse> SearchAsync(string query, int limit = 50, int offset = 0);
 }
@@ -95,6 +96,11 @@ public class EngineClientStub : IEngineClient
     }
 
     public Task RebuildIndexAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task ShutdownAsync()
     {
         return Task.CompletedTask;
     }

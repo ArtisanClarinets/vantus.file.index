@@ -2,6 +2,7 @@ using System.Windows;
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 using Vantus.App.ViewModels;
+using Vantus.App.Services;
 using Vantus.Core.Services;
 
 namespace Vantus.App;
@@ -50,6 +51,7 @@ public partial class App : Application
         });
 
         services.AddSingleton<IEngineClient, Vantus.App.Services.GrpcEngineClient>();
+        services.AddSingleton<EngineLifecycleManager>();
 
         services.AddTransient<SearchViewModel>();
         services.AddTransient<Vantus.App.Views.SearchPage>();
@@ -81,6 +83,10 @@ public partial class App : Application
             var ruleService = Services.GetRequiredService<RuleService>();
             ruleService.InitializeAsync().Wait();
 
+            // Start Engine
+            var engineManager = Services.GetRequiredService<EngineLifecycleManager>();
+            engineManager.StartEngine();
+
             MainWindow = Services.GetRequiredService<MainWindow>();
             MainWindow.Show();
         }
@@ -89,5 +95,12 @@ public partial class App : Application
             MessageBox.Show($"Startup error: {ex.Message}", "Vantus Error", MessageBoxButton.OK, MessageBoxImage.Error);
             Shutdown();
         }
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        var engineManager = Services.GetService<EngineLifecycleManager>();
+        engineManager?.StopEngine();
+        base.OnExit(e);
     }
 }

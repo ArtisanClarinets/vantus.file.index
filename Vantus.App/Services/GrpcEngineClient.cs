@@ -72,6 +72,18 @@ public class GrpcEngineClient : IEngineClient
         await _client.RebuildIndexAsync(new Empty());
     }
 
+    public async Task ShutdownAsync()
+    {
+        try
+        {
+             await _client.ShutdownAsync(new Empty());
+        }
+        catch
+        {
+             // Ignore errors on shutdown
+        }
+    }
+
     public async Task<Core.Services.TestExtractionResult> TestExtractionAsync(string filePath)
     {
         var response = await _client.TestExtractionAsync(new TestExtractionRequest { FilePath = filePath });

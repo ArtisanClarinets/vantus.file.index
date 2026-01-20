@@ -4,6 +4,7 @@ using Vantus.Engine.Protos;
 using Vantus.Engine.Data;
 using Microsoft.EntityFrameworkCore;
 using Vantus.Engine.Services.Search;
+using Microsoft.Extensions.Hosting;
 
 namespace Vantus.Engine.Services;
 
@@ -13,17 +14,20 @@ public class EngineService : Engine.Protos.Engine.EngineBase
     private readonly FileMonitorService _fileMonitor;
     private readonly VantusDbContext _db;
     private readonly VectorSearchService _vectorSearch;
+    private readonly IHostApplicationLifetime _lifetime;
 
     public EngineService(
-        ILogger<EngineService> logger, 
-        FileMonitorService fileMonitor, 
+        ILogger<EngineService> logger,
+        FileMonitorService fileMonitor,
         VantusDbContext db,
-        VectorSearchService vectorSearch)
+        VectorSearchService vectorSearch,
+        IHostApplicationLifetime lifetime)
     {
         _logger = logger;
         _fileMonitor = fileMonitor;
         _db = db;
         _vectorSearch = vectorSearch;
+        _lifetime = lifetime;
     }
 
     public override async Task<Vantus.Engine.Protos.SearchResponse> Search(SearchRequest request, ServerCallContext context)
@@ -109,10 +113,17 @@ public class EngineService : Engine.Protos.Engine.EngineBase
         return Task.FromResult(new Empty());
     }
 
+    public override Task<Empty> Shutdown(Empty request, ServerCallContext context)
+    {
+        _logger.LogInformation("Shutdown requested via RPC");
+        _lifetime.StopApplication();
+        return Task.FromResult(new Empty());
+    }
+
     public override Task<Vantus.Engine.Protos.TestExtractionResult> TestExtraction(TestExtractionRequest request, ServerCallContext context)
     {
         _logger.LogInformation("Test Extraction: {FilePath}", request.FilePath);
-        
+
         // Mock result
         return Task.FromResult(new Vantus.Engine.Protos.TestExtractionResult
         {
