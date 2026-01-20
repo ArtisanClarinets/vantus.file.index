@@ -1,6 +1,7 @@
 using UglyToad.PdfPig;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Tesseract;
 
 namespace Vantus.Engine.Parsers;
 
@@ -69,11 +70,33 @@ public class ImageParser : IFileParser
 {
     public bool CanParse(string extension) =>
         extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) ||
-        extension.Equals(".png", StringComparison.OrdinalIgnoreCase);
+        extension.Equals(".png", StringComparison.OrdinalIgnoreCase) ||
+        extension.Equals(".tif", StringComparison.OrdinalIgnoreCase);
 
     public Task<string> ParseAsync(string filePath)
     {
-        // Placeholder for OCR / EXIF extraction
-        return Task.FromResult($"[Image Metadata Placeholder for {Path.GetFileName(filePath)}]");
+        return Task.Run(() =>
+        {
+            try
+            {
+                // Note: Tesseract requires 'tessdata' folder with language files in the app directory.
+                // For this environment, we assume it's present or fail gracefully.
+                var tessDataPath = Path.Combine(AppContext.BaseDirectory, "tessdata");
+                if (!Directory.Exists(tessDataPath))
+                {
+                    // Fallback if no tessdata
+                    return $"[OCR Unavailable: Missing tessdata] {Path.GetFileName(filePath)}";
+                }
+
+                using var engine = new TesseractEngine(tessDataPath, "eng", EngineMode.Default);
+                using var img = Pix.LoadFromFile(filePath);
+                using var page = engine.Process(img);
+                return page.GetText();
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        });
     }
 }
