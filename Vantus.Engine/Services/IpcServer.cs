@@ -1,7 +1,12 @@
 
 using System.IO.Pipes;
 using System.Text;
+using System.Linq;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
+using System;
 
 namespace Vantus.Engine.Services;
 
@@ -29,8 +34,6 @@ public class IpcServer
             while(!ct.IsCancellationRequested)
             {
                 await Task.Delay(5000, ct);
-                // If we haven't received a connection in X minutes, or some other heartbeat, we could exit.
-                // For now, relies on explicit kill or pipe broken signals if we were doing persistent connections.
             }
         }, ct);
 
@@ -66,10 +69,7 @@ public class IpcServer
                 {
                     var query = line.Substring(7);
                     var results = await _searchService.SearchAsync(query);
-                    // Use simple JSON serialization or custom delimiter that handles paths
-                    // JSON is safer.
-                    var paths = results.Select(r => r.Path).ToList();
-                    var json = System.Text.Json.JsonSerializer.Serialize(paths);
+                    var json = System.Text.Json.JsonSerializer.Serialize(results);
                     await writer.WriteLineAsync(json);
                 }
                 else if (line == "REBUILD")

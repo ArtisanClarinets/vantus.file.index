@@ -1,6 +1,10 @@
 using Dapper;
 using Microsoft.Extensions.Logging;
-using Vantus.Engine.Models;
+using Vantus.Core.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace Vantus.Engine.Services;
 
@@ -15,37 +19,35 @@ public class SearchService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<FileResult>> SearchAsync(string query)
+    public async Task<IEnumerable<SearchResult>> SearchAsync(string query)
     {
         using var conn = _db.GetConnection();
-        // FTS5 query
-        // "SELECT * FROM files WHERE id IN (SELECT rowid FROM files_fts WHERE files_fts MATCH @Query)"
 
+        // FTS5 query with snippet generation
         var sql = @"
-            SELECT f.*
+            SELECT f.path, f.name, snippet(files_fts, 5, '<b>', '</b>', '...', 20) as snippet, fts.rank
             FROM files f
             JOIN files_fts fts ON f.id = fts.rowid
-            WHERE fts MATCH @Query
+            WHERE files_fts MATCH @Query
             ORDER BY rank
             LIMIT 50;
         ";
 
         try
         {
-            return await conn.QueryAsync<FileResult>(sql, new { Query = query });
+            var results = await conn.QueryAsync<dynamic>(sql, new { Query = query });
+            return results.Select(r => new SearchResult
+            {
+                Path = r.path,
+                Title = r.name,
+                Snippet = r.snippet ?? string.Empty,
+                Score = (double)r.rank
+            });
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Search failed for query {Query}", query);
-            return Enumerable.Empty<FileResult>();
+            return Enumerable.Empty<SearchResult>();
         }
     }
-}
-
-public class FileResult
-{
-    public long Id { get; set; }
-    public string Path { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-    public long Size { get; set; }
 }
