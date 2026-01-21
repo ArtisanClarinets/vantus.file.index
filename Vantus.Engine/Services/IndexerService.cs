@@ -65,6 +65,9 @@ public class IndexerService
         }
 
         using var conn = _db.GetConnection();
+        // Ensure foreign keys are enabled
+        await conn.ExecuteAsync("PRAGMA foreign_keys = ON;");
+
         var sql = @"
             INSERT INTO files (path, name, extension, size, last_modified, content)
             VALUES (@Path, @Name, @Extension, @Size, @LastModified, @Content)
@@ -97,5 +100,13 @@ public class IndexerService
         await _actionLog.LogActionAsync(filePath, "Index", "Indexed file with metadata extraction");
 
         _logger.LogDebug("Indexed {Path}", filePath);
+    }
+
+    public async Task DeleteFileAsync(string filePath)
+    {
+        using var conn = _db.GetConnection();
+        await conn.ExecuteAsync("PRAGMA foreign_keys = ON;"); // Ensure cascade delete works
+        await conn.ExecuteAsync("DELETE FROM files WHERE path = @Path", new { Path = filePath });
+        _logger.LogInformation("Deleted {Path} from index", filePath);
     }
 }

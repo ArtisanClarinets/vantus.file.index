@@ -81,7 +81,18 @@ public class FileCrawlerService : IDisposable
     private void OnFileRenamed(object sender, RenamedEventArgs e)
     {
         // Delete old, index new
-        // For now just index new. Ideally we remove the old entry from DB.
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _indexer.DeleteFileAsync(e.OldFullPath);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Failed to remove renamed file: {Path}", e.OldFullPath);
+            }
+        });
+
         DebounceIndex(e.FullPath);
     }
 
@@ -105,7 +116,17 @@ public class FileCrawlerService : IDisposable
 
     private void OnFileDeleted(object sender, FileSystemEventArgs e)
     {
-        // TODO: Call indexer delete
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await _indexer.DeleteFileAsync(e.FullPath);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Failed to remove deleted file: {Path}", e.FullPath);
+            }
+        });
     }
 
     public void Dispose()
