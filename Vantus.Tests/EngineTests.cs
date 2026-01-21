@@ -33,6 +33,7 @@ public class EngineTests : IDisposable
 
     public void Dispose()
     {
+         SqliteConnection.ClearAllPools();
          if (File.Exists(_testDbPath)) File.Delete(_testDbPath);
     }
 

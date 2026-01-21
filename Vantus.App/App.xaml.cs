@@ -13,6 +13,7 @@ namespace Vantus.App;
 public partial class App : Application
 {
     public IHost Host { get; }
+    private System.Diagnostics.Process? _engineProcess;
 
     public static T GetService<T>() where T : class
     {
@@ -61,26 +62,47 @@ public partial class App : Application
     }
 
     private async void OnStartup(object sender, StartupEventArgs e)
-    private System.Diagnostics.Process? _engineProcess;
-
-    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         await Host.StartAsync();
 
         var lifecycleManager = GetService<EngineLifecycleManager>();
         await lifecycleManager.StartEngineAsync();
 
+        // Start the Engine Process
+        try 
+        {
+            var enginePath = Path.Combine(AppContext.BaseDirectory, "Engine", "Vantus.Engine.exe");
+            if (!File.Exists(enginePath))
+            {
+                enginePath = Path.Combine(AppContext.BaseDirectory, "Vantus.Engine.exe");
+            }
+
+            if (File.Exists(enginePath))
+            {
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = enginePath,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+                _engineProcess = System.Diagnostics.Process.Start(psi);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Engine not found at {enginePath}");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Failed to start engine: {ex}");
+        }
+
         var errorHandler = GetService<ErrorHandlingService>();
         errorHandler.Initialize();
 
-        m_window.Closed += (s, e) =>
-        {
-            StopEngine();
-        };
-
+        // Init Registry & Policy & Store
         try
         {
-            // Init Registry & Policy & Store
             var registry = GetService<ISettingsRegistry>();
             await registry.InitializeAsync();
 
@@ -105,29 +127,17 @@ public partial class App : Application
         var iconPath = Path.Combine(AppContext.BaseDirectory, "Assets", "Resources", "app.ico");
         if (File.Exists(iconPath))
         {
-<<<<<<< HEAD
             try {
                 mainWindow.Icon = new System.Windows.Media.Imaging.BitmapImage(new Uri(iconPath));
             } catch { /* Ignore icon error */ }
-=======
-            try
-            {
-                var psi = new System.Diagnostics.ProcessStartInfo
-                {
-                    FileName = path,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
-                _engineProcess = System.Diagnostics.Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Failed to start engine: {ex}");
-            }
- 
         }
         
         mainWindow.Show();
+        
+        mainWindow.Closed += (s, args) =>
+        {
+            StopEngine();
+        };
     }
 
 
@@ -148,6 +158,4 @@ public partial class App : Application
         }
         catch { }
     }
-
-+    private Window m_window;
 }
