@@ -13,6 +13,15 @@ public partial class DashboardViewModel : ObservableObject
     [ObservableProperty]
     private string _status = "Unknown";
 
+    [ObservableProperty]
+    private long _filesIndexed;
+
+    [ObservableProperty]
+    private long _totalTags;
+
+    [ObservableProperty]
+    private long _totalPartners;
+
     public DashboardViewModel(IEngineClient engineClient)
     {
         _engineClient = engineClient;
@@ -28,7 +37,11 @@ public partial class DashboardViewModel : ObservableObject
         {
             try
             {
-                Status = await _engineClient.GetIndexStatusAsync();
+                var stats = await _engineClient.GetStatsAsync();
+                Status = stats.Status;
+                FilesIndexed = stats.FilesIndexed;
+                TotalTags = stats.TotalTags;
+                TotalPartners = stats.TotalPartners;
             }
             catch
             {

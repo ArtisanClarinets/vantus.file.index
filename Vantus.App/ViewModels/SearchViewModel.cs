@@ -13,35 +13,31 @@ public partial class SearchViewModel : ObservableObject
     private readonly IEngineClient _engineClient;
 
     [ObservableProperty]
-    private string _query = string.Empty;
-
-    [ObservableProperty]
-    private ObservableCollection<SearchResult> _results = new();
+    private string _searchQuery = "";
 
     [ObservableProperty]
     private bool _isLoading;
 
     [ObservableProperty]
-    private SearchResult? _selectedResult;
+    private ObservableCollection<SearchResult> _results = new();
 
     public SearchViewModel(IEngineClient engineClient)
     {
         _engineClient = engineClient;
     }
 
-    // Default constructor for design time (or if service provider fails)
     public SearchViewModel() : this(new StubEngineClient()) { }
 
     [RelayCommand]
-    public async Task SearchAsync()
+    private async Task PerformSearch()
     {
-        if (string.IsNullOrWhiteSpace(Query)) return;
-
+        if (string.IsNullOrWhiteSpace(SearchQuery)) return;
         IsLoading = true;
         try
         {
-            var results = await _engineClient.SearchAsync(Query);
-            Results = new ObservableCollection<SearchResult>(results);
+            var results = await _engineClient.SearchAsync(SearchQuery);
+            Results.Clear();
+            foreach (var r in results) Results.Add(r);
         }
         finally
         {

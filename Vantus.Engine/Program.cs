@@ -25,6 +25,7 @@ builder.Services.AddSingleton<FileIndexerService>();
 builder.Services.AddSingleton<FileMonitorService>();
 builder.Services.AddSingleton<OnnxEmbeddingService>();
 builder.Services.AddSingleton<VectorSearchService>();
+builder.Services.AddSingleton<SearchService>();
 
 builder.Services.AddSingleton<TagService>();
 builder.Services.AddSingleton<PartnerService>();

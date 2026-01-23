@@ -54,6 +54,8 @@ public partial class App : Application
                 services.AddTransient<DashboardViewModel>();
                 services.AddTransient<SearchViewModel>();
                 services.AddTransient<RulesEditorViewModel>();
+                services.AddTransient<TagsViewModel>();
+                services.AddTransient<PartnersViewModel>();
                 
                 // Windows/Pages
                 services.AddSingleton<MainWindow>();

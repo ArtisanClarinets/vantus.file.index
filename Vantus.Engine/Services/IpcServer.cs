@@ -1,4 +1,3 @@
-
 using System.IO.Pipes;
 using System.Text;
 using System.Linq;
@@ -7,6 +6,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 using System;
+using System.Text.Json;
+using Vantus.Core.Models;
+using Dapper;
 
 namespace Vantus.Engine.Services;
 
@@ -16,14 +18,20 @@ public class IpcServer
     private readonly SearchService _searchService;
     private readonly DatabaseService _db;
     private readonly FileCrawlerService _crawler;
+    private readonly TagService _tagService;
+    private readonly PartnerService _partnerService;
+    private readonly RulesEngineService _rulesService;
     private const string PipeName = "VantusEnginePipe";
 
-    public IpcServer(ILogger<IpcServer> logger, SearchService searchService, DatabaseService db, FileCrawlerService crawler)
+    public IpcServer(ILogger<IpcServer> logger, SearchService searchService, DatabaseService db, FileCrawlerService crawler, TagService tagService, PartnerService partnerService, RulesEngineService rulesService)
     {
         _logger = logger;
         _searchService = searchService;
         _db = db;
         _crawler = crawler;
+        _tagService = tagService;
+        _partnerService = partnerService;
+        _rulesService = rulesService;
     }
 
     public async Task StartAsync(CancellationToken ct)
@@ -61,16 +69,76 @@ public class IpcServer
             using (var writer = new StreamWriter(server) { AutoFlush = true })
             {
                 var line = await reader.ReadLineAsync(ct);
+                if (string.IsNullOrEmpty(line)) return;
+
                 if (line == "STATUS")
                 {
                     await writer.WriteLineAsync("Indexing");
                 }
-                else if (line?.StartsWith("SEARCH ") == true)
+                else if (line == "GET_STATS")
+                {
+                     using var conn = _db.GetConnection();
+                     var files = await conn.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM files");
+                     var tags = await conn.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM tags");
+                     var partners = await conn.ExecuteScalarAsync<long>("SELECT COUNT(*) FROM partners");
+                     var stats = new IndexStats { FilesIndexed = files, TotalTags = tags, TotalPartners = partners, Status = "Active" };
+                     await writer.WriteLineAsync(JsonSerializer.Serialize(stats));
+                }
+                else if (line.StartsWith("SEARCH "))
                 {
                     var query = line.Substring(7);
                     var results = await _searchService.SearchAsync(query);
-                    var json = System.Text.Json.JsonSerializer.Serialize(results);
-                    await writer.WriteLineAsync(json);
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(results));
+                }
+                else if (line == "GET_TAGS")
+                {
+                    var results = await _tagService.GetAllTagsAsync();
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(results));
+                }
+                else if (line.StartsWith("ADD_TAG "))
+                {
+                    var json = line.Substring(8);
+                    var tag = JsonSerializer.Deserialize<Tag>(json);
+                    if (tag != null) await _tagService.AddTagAsync(tag.Name, tag.Type);
+                    await writer.WriteLineAsync("OK");
+                }
+                else if (line.StartsWith("DELETE_TAG "))
+                {
+                    var name = line.Substring(11);
+                    await _tagService.DeleteTagAsync(name);
+                    await writer.WriteLineAsync("OK");
+                }
+                else if (line == "GET_PARTNERS")
+                {
+                    var results = await _partnerService.GetAllPartnersAsync();
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(results));
+                }
+                else if (line.StartsWith("ADD_PARTNER "))
+                {
+                    var json = line.Substring(12);
+                    var p = JsonSerializer.Deserialize<Partner>(json);
+                    if (p != null) await _partnerService.AddPartnerAsync(p);
+                    await writer.WriteLineAsync("OK");
+                }
+                 else if (line == "GET_RULES")
+                {
+                    var results = await _rulesService.GetAllRulesAsync();
+                    await writer.WriteLineAsync(JsonSerializer.Serialize(results));
+                }
+                else if (line.StartsWith("ADD_RULE "))
+                {
+                    var json = line.Substring(9);
+                    var r = JsonSerializer.Deserialize<Rule>(json);
+                    if (r != null) await _rulesService.AddRuleAsync(r);
+                    await writer.WriteLineAsync("OK");
+                }
+                else if (line.StartsWith("DELETE_RULE "))
+                {
+                    if (long.TryParse(line.Substring(12), out long id))
+                    {
+                        await _rulesService.DeleteRuleAsync(id);
+                    }
+                    await writer.WriteLineAsync("OK");
                 }
                 else if (line == "REBUILD")
                 {
@@ -84,6 +152,9 @@ public class IpcServer
                 }
             }
         }
-        catch { }
+        catch (Exception ex)
+        {
+             _logger.LogError(ex, "IPC Handler Error");
+        }
     }
 }
