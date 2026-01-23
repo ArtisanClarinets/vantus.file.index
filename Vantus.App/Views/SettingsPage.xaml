@@ -49,6 +49,14 @@
                                       <DataTemplate DataType="{x:Type viewmodels:SliderSettingViewModel}">
                                           <Slider Value="{Binding Value}" Minimum="{Binding Min}" Maximum="{Binding Max}" TickFrequency="{Binding Step}" Width="200"/>
                                       </DataTemplate>
+                                      <!-- Action / Button -->
+                                      <DataTemplate DataType="{x:Type viewmodels:ActionSettingViewModel}">
+                                          <ui:Button Content="{Binding Label}" Command="{Binding ExecuteCommand}" Icon="{ui:SymbolIcon Play24}" />
+                                      </DataTemplate>
+                                      <!-- Readonly / Label -->
+                                      <DataTemplate DataType="{x:Type viewmodels:ReadonlySettingViewModel}">
+                                          <TextBlock Text="{Binding Value}" Foreground="{DynamicResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                                      </DataTemplate>
                                  </ContentControl.Resources>
                             </ContentControl>
                         </Grid>
