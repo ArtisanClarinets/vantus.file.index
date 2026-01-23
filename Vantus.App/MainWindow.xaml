@@ -23,6 +23,8 @@
              <ui:NavigationView.MenuItems>
                  <ui:NavigationViewItem Content="Dashboard" Icon="{ui:SymbolIcon Home24}" TargetPageType="{x:Type views:DashboardPage}" />
                  <ui:NavigationViewItem Content="Search" Icon="{ui:SymbolIcon Search24}" TargetPageType="{x:Type views:SearchPage}" />
+                 <ui:NavigationViewItem Content="Tags" Icon="{ui:SymbolIcon Tag24}" TargetPageType="{x:Type views:TagsPage}" />
+                 <ui:NavigationViewItem Content="Partners" Icon="{ui:SymbolIcon People24}" TargetPageType="{x:Type views:PartnersPage}" />
                  <ui:NavigationViewItem Content="Rules" Icon="{ui:SymbolIcon CheckboxChecked24}" TargetPageType="{x:Type views:RulesEditor}" />
              </ui:NavigationView.MenuItems>
              <ui:NavigationView.FooterMenuItems>

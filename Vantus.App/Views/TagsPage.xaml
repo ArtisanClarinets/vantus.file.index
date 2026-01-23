@@ -1,0 +1,48 @@
+<Page x:Class="Vantus.App.Views.TagsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:vm="clr-namespace:Vantus.App.ViewModels"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance vm:TagsViewModel, IsDesignTimeCreatable=True}"
+      Title="Tags">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Tags" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+
+        <ui:Card Grid.Row="1" Margin="0,0,0,20">
+             <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Text="{Binding NewTagName, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="New Tag Name" Margin="0,0,10,0"/>
+                <Button Grid.Column="1" Content="Add Tag" Command="{Binding AddTagCommand}" Appearance="Primary"/>
+             </Grid>
+        </ui:Card>
+
+        <ListView Grid.Row="2" ItemsSource="{Binding Tags}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="300"/>
+                    <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Type}" Width="150"/>
+                    <GridViewColumn Header="Actions">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Command="{Binding DataContext.DeleteTagCommand, RelativeSource={RelativeSource AncestorType=Page}}" CommandParameter="{Binding}" Appearance="Danger" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Page>

@@ -1,6 +1,12 @@
 using Dapper;
 using Microsoft.Extensions.Logging;
-using Vantus.Engine.Models;
+using Vantus.Core.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
+using System.Linq;
+using System;
 
 namespace Vantus.Engine.Services;
 
@@ -15,6 +21,20 @@ public class PartnerService
     {
         _db = db;
         _logger = logger;
+    }
+
+    public async Task<IEnumerable<Partner>> GetAllPartnersAsync()
+    {
+         using var conn = _db.GetConnection();
+         return await conn.QueryAsync<Partner>("SELECT * FROM partners");
+    }
+
+    public async Task AddPartnerAsync(Partner partner)
+    {
+        using var conn = _db.GetConnection();
+        await conn.ExecuteAsync("INSERT OR IGNORE INTO partners (name, domains, keywords) VALUES (@Name, @Domains, @Keywords)", partner);
+        // Invalidate cache
+        _cachedPartners = null;
     }
 
     public async Task LoadPartnersAsync()
@@ -81,7 +101,7 @@ public class PartnerService
         }
     }
 
-    private async Task AssociatePartnerAsync(string filePath, int partnerId)
+    private async Task AssociatePartnerAsync(string filePath, long partnerId)
     {
         using var conn = _db.GetConnection();
         var fileId = await conn.ExecuteScalarAsync<long?>("SELECT id FROM files WHERE path = @Path", new { Path = filePath });

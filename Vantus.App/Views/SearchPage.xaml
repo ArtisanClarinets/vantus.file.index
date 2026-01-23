@@ -9,55 +9,33 @@
       d:DataContext="{d:DesignInstance vm:SearchViewModel, IsDesignTimeCreatable=True}"
       Title="Search">
 
-    <Page.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-    </Page.Resources>
-
     <Grid Margin="24">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Search Bar -->
         <Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <!-- Note: PlaceholderText might vary by Wpf.Ui version, using plain TextBox if needed but ui:TextBox preferred -->
-            <ui:TextBox PlaceholderText="Search for files, tags, or content..."
-                        Text="{Binding Query, UpdateSourceTrigger=PropertyChanged}"
-                        Icon="Search24"
-                        ClearButtonEnabled="True">
-                <ui:TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
-                </ui:TextBox.InputBindings>
-            </ui:TextBox>
-            <ui:Button Grid.Column="1" Margin="10,0,0,0"
-                       Command="{Binding SearchCommand}"
-                       Content="Search" Appearance="Primary" />
+            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search files..." Margin="0,0,10,0">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding PerformSearchCommand}"/>
+                </TextBox.InputBindings>
+            </TextBox>
+            <Button Grid.Column="1" Content="Search" Command="{Binding PerformSearchCommand}" Appearance="Primary"/>
         </Grid>
 
-        <!-- Results -->
-        <ListView Grid.Row="1" ItemsSource="{Binding Results}" SelectedItem="{Binding SelectedResult}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border Padding="10" BorderThickness="0,0,0,1" BorderBrush="#20808080">
-                        <StackPanel>
-                            <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                            <TextBlock Text="{Binding Path}" FontSize="12" Opacity="0.7" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                            <TextBlock Text="{Binding Snippet}" Margin="0,5,0,0" TextWrapping="Wrap" Opacity="0.9" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+        <ListView Grid.Row="1" ItemsSource="{Binding Results}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding Path}" Width="400"/>
+                    <GridViewColumn Header="Score" DisplayMemberBinding="{Binding Score}" Width="80"/>
+                </GridView>
+            </ListView.View>
         </ListView>
-
-        <!-- Loading Indicator -->
-        <ProgressBar Grid.Row="1" IsIndeterminate="True"
-                     VerticalAlignment="Top"
-                     Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </Page>

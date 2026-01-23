@@ -13,12 +13,32 @@
         <StackPanel>
             <TextBlock Text="System Status" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,20"/>
 
-            <ui:Card>
-                <StackPanel Margin="16">
-                    <TextBlock Text="Engine Status" Opacity="0.6" />
-                    <TextBlock Text="{Binding Status}" FontSize="24" FontWeight="Bold" Margin="0,8,0,0"/>
-                </StackPanel>
-            </ui:Card>
+            <UniformGrid Columns="2" Rows="2">
+                <ui:Card Margin="0,0,8,8">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Engine Status" Opacity="0.6" />
+                        <TextBlock Text="{Binding Status}" FontSize="24" FontWeight="Bold" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Margin="8,0,0,8">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Files Indexed" Opacity="0.6" />
+                        <TextBlock Text="{Binding FilesIndexed}" FontSize="24" FontWeight="Bold" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Margin="0,8,8,0">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Total Tags" Opacity="0.6" />
+                        <TextBlock Text="{Binding TotalTags}" FontSize="24" FontWeight="Bold" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </ui:Card>
+                <ui:Card Margin="8,8,0,0">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="Total Partners" Opacity="0.6" />
+                        <TextBlock Text="{Binding TotalPartners}" FontSize="24" FontWeight="Bold" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </ui:Card>
+            </UniformGrid>
         </StackPanel>
     </Grid>
 </Page>

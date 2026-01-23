@@ -1,6 +1,12 @@
 using Dapper;
 using Microsoft.Extensions.Logging;
-using Vantus.Engine.Models;
+using Vantus.Core.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Threading;
+using System.IO;
+using System.Linq;
+using System;
 
 namespace Vantus.Engine.Services;
 
@@ -17,6 +23,28 @@ public class RulesEngineService
         _tagService = tagService;
         _db = db;
         _logger = logger;
+    }
+
+    public async Task<IEnumerable<Rule>> GetAllRulesAsync()
+    {
+         using var conn = _db.GetConnection();
+         return await conn.QueryAsync<Rule>("SELECT * FROM rules");
+    }
+
+    public async Task AddRuleAsync(Rule rule)
+    {
+         using var conn = _db.GetConnection();
+         await conn.ExecuteAsync(
+             "INSERT INTO rules (name, condition_type, condition_value, action_type, action_value, is_active) VALUES (@Name, @ConditionType, @ConditionValue, @ActionType, @ActionValue, @IsActive)",
+             rule);
+         _cachedRules = null;
+    }
+
+    public async Task DeleteRuleAsync(long id)
+    {
+        using var conn = _db.GetConnection();
+        await conn.ExecuteAsync("DELETE FROM rules WHERE id = @Id", new { Id = id });
+        _cachedRules = null;
     }
 
     public async Task LoadRulesAsync()
