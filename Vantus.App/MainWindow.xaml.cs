@@ -57,7 +57,7 @@ public partial class MainWindow : FluentWindow
         if (pageDef != null)
         {
             var settings = _schema.GetSettingsForPage(pageId);
-            var vm = new SettingsPageViewModel(pageDef, settings, _store);
+            var vm = new SettingsPageViewModel(pageDef, settings, _store, App.Services);
             ContentFrame.Navigate(new SettingsPage { DataContext = vm });
         }
     }

@@ -13,7 +13,7 @@
     <MediaTemplate EmbedCab="yes" />
 
     <!-- Icon for Add/Remove Programs -->
-    <Icon Id="AppIcon" SourceFile="publish\Vantus.App.exe" />
+    <Icon Id="AppIcon" SourceFile="..\Vantus.App\Logo.ico" />
     <Property Id="ARPPRODUCTICON" Value="AppIcon" />
 
     <!-- UI Configuration -->
